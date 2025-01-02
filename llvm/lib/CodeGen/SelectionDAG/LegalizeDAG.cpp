@@ -5070,6 +5070,7 @@ void SelectionDAGLegalize::PromoteNode(SDNode *Node) {
   MVT NVT = TLI.getTypeToPromoteTo(Node->getOpcode(), OVT);
   SDLoc dl(Node);
   SDValue Tmp1, Tmp2, Tmp3, Tmp4;
+  SelectionDAG::FlagInserter InsertFlags(DAG, Node);
   switch (Node->getOpcode()) {
   case ISD::CTTZ:
   case ISD::CTTZ_ZERO_UNDEF:

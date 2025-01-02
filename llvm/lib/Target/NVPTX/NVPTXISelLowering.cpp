@@ -130,6 +130,14 @@ bool NVPTXTargetLowering::usePrecSqrtF32() const {
   }
 }
 
+bool NVPTXTargetLowering::useApproxLog2F32() const {
+  if (UseApproxLog2F32.getNumOccurrences() > 0)
+    // If nvptx-approx-sqrtf32 is used on the command-line, always honor it
+    return UseApproxLog2F32;
+  // Otherwise, use lg2.approx if fast math is enabled
+  return getTargetMachine().Options.UnsafeFPMath;
+}
+
 bool NVPTXTargetLowering::useF32FTZ(const MachineFunction &MF) const {
   return MF.getDenormalMode(APFloat::IEEEsingle()).Output ==
          DenormalMode::PreserveSign;
@@ -990,13 +998,16 @@ NVPTXTargetLowering::NVPTXTargetLowering(const NVPTXTargetMachine &TM,
   setBF16OperationAction(ISD::FEXP2, MVT::v2bf16, Legal, Expand);
 
   // FLOG2 supports f32 only
-  // f16/bf16 types aren't supported, but they are promoted/expanded to f32.
-  if (UseApproxLog2F32) {
-    setOperationAction(ISD::FLOG2, MVT::f32, Legal);
-    setOperationPromotedToType(ISD::FLOG2, MVT::f16, MVT::f32);
-    setOperationPromotedToType(ISD::FLOG2, MVT::bf16, MVT::f32);
-    setOperationAction(ISD::FLOG2, {MVT::v2f16, MVT::v2bf16}, Expand);
-  }
+  // Emulate support for f16, bf16 by promoting/expanding to f32.
+  // Let FLOG2 nodes be "legal" and the tablegen code will do further checking
+  // for the presence of 'afn' flag before lowering, unless
+  // -nvptx-approx-log2f32 was set.
+  setOperationAction(ISD::FLOG2, MVT::f32, Legal);
+  setOperationAction(ISD::FLOG2, MVT::f16, Legal);
+  setOperationAction(ISD::FLOG2, MVT::bf16, Legal);
+  // setOperationPromotedToType(ISD::FLOG2, MVT::f16, MVT::f32);
+  // setOperationPromotedToType(ISD::FLOG2, MVT::bf16, MVT::f32);
+  setOperationAction(ISD::FLOG2, {MVT::v2f16, MVT::v2bf16}, Expand);
 
   // No FPOW or FREM in PTX.
 

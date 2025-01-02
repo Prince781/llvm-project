@@ -1277,9 +1277,9 @@ def INT_NVVM_LG2_APPROX_F : F_MATH_1<"lg2.approx.f32 \t$dst, $src0;",
 def INT_NVVM_LG2_APPROX_D : F_MATH_1<"lg2.approx.f64 \t$dst, $src0;",
   Float64Regs, Float64Regs, int_nvvm_lg2_approx_d>;
 
-def : Pat<(flog2 f32:$a), (INT_NVVM_LG2_APPROX_FTZ_F Float32Regs:$a)>,
+def : Pat<(NVPTX_flog2_afn f32:$a), (INT_NVVM_LG2_APPROX_FTZ_F Float32Regs:$a)>,
           Requires<[doF32FTZ]>;
-def : Pat<(flog2 f32:$a), (INT_NVVM_LG2_APPROX_F Float32Regs:$a)>,
+def : Pat<(NVPTX_flog2_afn f32:$a), (INT_NVVM_LG2_APPROX_F Float32Regs:$a)>,
           Requires<[doNoF32FTZ]>;
 
 //

@@ -1213,7 +1213,18 @@ defm FNEG_H: F2_Support_Half<"neg", fneg>;
 
 defm FSQRT : F2<"sqrt.rn", fsqrt>;
 
+// fexp2 for .f16/bf16 types. These aren't remapped to a machine IR intrinsic,
+// unlike f32 (see NVPTXIntrinsics.td).
 defm FEXP2_H: F2_Support_Half_2<"ex2.approx", fexp2>;
+
+// A generic pattern that matches any flog2 SDNode that has 'afn' flag, or if
+// -enable-unsafe-fp-math is enabled, or if -nvptx-approx-log2f32 is enabled.
+// This is used in NVPTXIntrinsics.td.
+def NVPTX_flog2_afn : PatFrag<(ops node:$a), (flog2 node:$a),
+  [{
+    return N->getFlags().hasApproximateFuncs()
+      || Subtarget->getTargetLowering()->useApproxLog2F32();
+  }]>;
 
 //
 // F16 NEG

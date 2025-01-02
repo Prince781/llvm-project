@@ -69,6 +69,10 @@ bool NVPTXDAGToDAGISel::usePrecSqrtF32() const {
   return Subtarget->getTargetLowering()->usePrecSqrtF32();
 }
 
+bool NVPTXDAGToDAGISel::useApproxLog2F32() const {
+  return Subtarget->getTargetLowering()->useApproxLog2F32();
+}
+
 bool NVPTXDAGToDAGISel::useF32FTZ() const {
   return Subtarget->getTargetLowering()->useF32FTZ(*MF);
 }
