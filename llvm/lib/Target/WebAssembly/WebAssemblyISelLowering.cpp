@@ -1912,7 +1912,7 @@ SDValue WebAssemblyTargetLowering::LowerRETURNADDR(SDValue Op,
 
   unsigned Depth = Op.getConstantOperandVal(0);
   MakeLibCallOptions CallOptions;
-  return makeLibCall(DAG, RTLIB::RETURN_ADDRESS, Op.getValueType(),
+  return makeLibCall(DAG, RTLIB::Libcall::RETURN_ADDRESS, Op.getValueType(),
                      {DAG.getConstant(Depth, DL, MVT::i32)}, CallOptions, DL)
       .first;
 }

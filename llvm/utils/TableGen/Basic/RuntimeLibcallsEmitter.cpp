@@ -127,7 +127,7 @@ public:
   size_t getEnumVal() const { return EnumVal; }
 
   void emitEnumEntry(raw_ostream &OS) const {
-    OS << "RTLIB::" << TheDef->getValueAsString("Name");
+    OS << "RTLIB::Libcall::" << TheDef->getValueAsString("Name");
   }
 };
 
@@ -171,7 +171,7 @@ public:
   bool isDefault() const { return TheDef->getValueAsBit("IsDefault"); }
 
   void emitEnumEntry(raw_ostream &OS) const {
-    OS << "RTLIB::" << TheDef->getName();
+    OS << "RTLIB::LibcallImpl::" << TheDef->getName();
   }
 
   void emitSetImplCall(raw_ostream &OS) const {
@@ -276,30 +276,78 @@ void RuntimeLibcallEmitter::emitGetRuntimeLibcallEnum(raw_ostream &OS) const {
   OS << "#ifdef GET_RUNTIME_LIBCALL_ENUM\n"
         "namespace llvm {\n"
         "namespace RTLIB {\n"
-        "enum Libcall : unsigned short {\n";
+        "class Libcall {\n"
+        "public:\n"
+        "  enum Value : unsigned short {\n";
 
   for (const RuntimeLibcall &LibCall : RuntimeLibcallDefList) {
     StringRef Name = LibCall.getName();
-    OS << "  " << Name << " = " << LibCall.getEnumVal() << ",\n";
+    OS << "    " << Name << " = " << LibCall.getEnumVal() << ",\n";
   }
 
   // TODO: Emit libcall names as string offset table.
 
-  OS << "  UNKNOWN_LIBCALL = " << RuntimeLibcallDefList.size()
-     << "\n};\n\n"
-        "enum LibcallImpl : unsigned short {\n"
-        "  Unsupported = 0,\n";
+  OS << "    UNKNOWN_LIBCALL = " << RuntimeLibcallDefList.size() << "\n";
+  OS << "  }; // end enum Libcall::Value\n";
 
-  // FIXME: Emit this in a different namespace. And maybe use enum class.
+  // Emit constructors, conversion operator, and member holding raw enum val
+  OS << "  Libcall() : V(UNKNOWN_LIBCALL) {}\n";
+  OS << "  Libcall(Value V) : V(V) {}\n";
+  OS << "  Libcall(unsigned short V) : V(static_cast<Value>(V)) {}\n";
+  OS << "  operator Value() const { return V; }\n";
+  OS << "private:\n";
+  OS << "  Value V;\n";
+  OS << "}; // End class Libcall\n\n";
+
+  OS << "class LibcallImpl {\n"
+        "public:\n"
+        "  enum Value : unsigned short {\n"
+        "    Unsupported = 0,\n";
+
+  // FIXME: Emit this in a different namespace.
   for (const RuntimeLibcallImpl &LibCall : RuntimeLibcallImplDefList) {
-    OS << "  " << LibCall.getName() << " = " << LibCall.getEnumVal() << ", // "
+    OS << "    " << LibCall.getName() << " = " << LibCall.getEnumVal() << ", // "
        << LibCall.getLibcallFuncName() << '\n';
   }
 
-  OS << "  NumLibcallImpls = " << RuntimeLibcallImplDefList.size() + 1
-     << "\n};\n"
-        "} // End namespace RTLIB\n"
-        "} // End namespace llvm\n"
+  OS << "    NumLibcallImpls = " << RuntimeLibcallImplDefList.size() + 1 << "\n";
+  OS << "  }; // end enum LibcallImpl::Value\n";
+
+  // Emit constructors, conversion operator, and member holding raw enum val
+  OS << "  LibcallImpl() : V(Unsupported) {}\n";
+  OS << "  LibcallImpl(Value V) : V(V) {}\n";
+  OS << "  LibcallImpl(unsigned short V) : V(static_cast<Value>(V)) {}\n";
+  OS << "  operator Value() const { return V; }\n";
+  OS << "private:\n";
+  OS << "  Value V;\n";
+  OS << "}; // End class LibcallImpl\n";
+
+  OS << "} // End namespace RTLIB\n";
+
+  // Declare traits for iterating over the enums and iterator functions.
+  OS << "template <> struct enum_iteration_traits<RTLIB::Libcall::Value> {\n"
+        "  static constexpr bool is_iterable = true;\n"
+        "};\n\n";
+  OS << "template <> struct enum_iteration_traits<RTLIB::LibcallImpl::Value> {\n"
+        "  static constexpr bool is_iterable = true;\n"
+        "};\n\n";
+
+  // reopen RTLIB namespace
+  OS << "namespace RTLIB {\n";
+  OS << "static inline auto libcalls() {\n"
+        "  return enum_seq(Libcall::"
+     << RuntimeLibcallDefList.front().getName()
+     << ", Libcall::UNKNOWN_LIBCALL);\n"
+        "}\n\n";
+
+  OS << "static inline auto libcall_impls() {\n"
+        "  return enum_seq(LibcallImpl::"
+     << RuntimeLibcallImplDefList.front().getName()
+     << ", LibcallImpl::NumLibcallImpls);\n"
+        "}\n\n";
+  OS << "} // End namespace RTLIB\n";
+
+  OS << "} // End namespace llvm\n"
         "#endif\n\n";
 }
 
@@ -309,12 +357,12 @@ void RuntimeLibcallEmitter::emitGetInitRuntimeLibcallNames(
 
   OS << "const RTLIB::LibcallImpl "
         "llvm::RTLIB::RuntimeLibcallsInfo::"
-        "DefaultLibcallImpls[RTLIB::UNKNOWN_LIBCALL + 1] = {\n";
+        "DefaultLibcallImpls[RTLIB::Libcall::UNKNOWN_LIBCALL + 1] = {\n";
 
   for (const RuntimeLibcall &LibCall : RuntimeLibcallDefList) {
     auto I = LibCallToDefaultImpl.find(&LibCall);
     if (I == LibCallToDefaultImpl.end()) {
-      OS << "  RTLIB::Unsupported,";
+      OS << "  RTLIB::LibcallImpl::Unsupported,";
     } else {
       const RuntimeLibcallImpl *LibCallImpl = I->second;
       OS << "  ";
@@ -327,13 +375,13 @@ void RuntimeLibcallEmitter::emitGetInitRuntimeLibcallNames(
     OS << '\n';
   }
 
-  OS << "  RTLIB::Unsupported\n"
+  OS << "  RTLIB::LibcallImpl::Unsupported\n"
         "};\n\n";
 
   // Emit the implementation names
   OS << "const char *const llvm::RTLIB::RuntimeLibcallsInfo::"
-        "LibCallImplNames[RTLIB::NumLibcallImpls] = {\n"
-        "  nullptr, // RTLIB::Unsupported\n";
+        "LibCallImplNames[RTLIB::LibcallImpl::NumLibcallImpls] = {\n"
+        "  nullptr, // RTLIB::LibcallImpl::Unsupported\n";
 
   for (const RuntimeLibcallImpl &LibCallImpl : RuntimeLibcallImplDefList) {
     OS << "  \"" << LibCallImpl.getLibcallFuncName() << "\", // ";
@@ -345,8 +393,8 @@ void RuntimeLibcallEmitter::emitGetInitRuntimeLibcallNames(
 
   // Emit the reverse mapping from implementation libraries to RTLIB::Libcall
   OS << "const RTLIB::Libcall llvm::RTLIB::RuntimeLibcallsInfo::"
-        "ImplToLibcall[RTLIB::NumLibcallImpls] = {\n"
-        "  RTLIB::UNKNOWN_LIBCALL, // RTLIB::Unsupported\n";
+        "ImplToLibcall[RTLIB::LibcallImpl::NumLibcallImpls] = {\n"
+        "  RTLIB::Libcall::UNKNOWN_LIBCALL, // RTLIB::LibcallImpl::Unsupported\n";
 
   for (const RuntimeLibcallImpl &LibCallImpl : RuntimeLibcallImplDefList) {
     const RuntimeLibcall *Provides = LibCallImpl.getProvides();

@@ -112,7 +112,7 @@ RTLIB::Libcall RTLIB::getFPLibCall(EVT VT,
     VT == MVT::f80 ? Call_F80 :
     VT == MVT::f128 ? Call_F128 :
     VT == MVT::ppcf128 ? Call_PPCF128 :
-    RTLIB::UNKNOWN_LIBCALL;
+    RTLIB::Libcall(RTLIB::Libcall::UNKNOWN_LIBCALL);
 }
 
 /// getFPEXT - Return the FPEXT_*_* value for the given types, or
@@ -120,34 +120,34 @@ RTLIB::Libcall RTLIB::getFPLibCall(EVT VT,
 RTLIB::Libcall RTLIB::getFPEXT(EVT OpVT, EVT RetVT) {
   if (OpVT == MVT::f16) {
     if (RetVT == MVT::f32)
-      return FPEXT_F16_F32;
+      return Libcall::FPEXT_F16_F32;
     if (RetVT == MVT::f64)
-      return FPEXT_F16_F64;
+      return Libcall::FPEXT_F16_F64;
     if (RetVT == MVT::f80)
-      return FPEXT_F16_F80;
+      return Libcall::FPEXT_F16_F80;
     if (RetVT == MVT::f128)
-      return FPEXT_F16_F128;
+      return Libcall::FPEXT_F16_F128;
   } else if (OpVT == MVT::f32) {
     if (RetVT == MVT::f64)
-      return FPEXT_F32_F64;
+      return Libcall::FPEXT_F32_F64;
     if (RetVT == MVT::f128)
-      return FPEXT_F32_F128;
+      return Libcall::FPEXT_F32_F128;
     if (RetVT == MVT::ppcf128)
-      return FPEXT_F32_PPCF128;
+      return Libcall::FPEXT_F32_PPCF128;
   } else if (OpVT == MVT::f64) {
     if (RetVT == MVT::f128)
-      return FPEXT_F64_F128;
+      return Libcall::FPEXT_F64_F128;
     else if (RetVT == MVT::ppcf128)
-      return FPEXT_F64_PPCF128;
+      return Libcall::FPEXT_F64_PPCF128;
   } else if (OpVT == MVT::f80) {
     if (RetVT == MVT::f128)
-      return FPEXT_F80_F128;
+      return Libcall::FPEXT_F80_F128;
   } else if (OpVT == MVT::bf16) {
     if (RetVT == MVT::f32)
-      return FPEXT_BF16_F32;
+      return Libcall::FPEXT_BF16_F32;
   }
 
-  return UNKNOWN_LIBCALL;
+  return Libcall::UNKNOWN_LIBCALL;
 }
 
 /// getFPROUND - Return the FPROUND_*_* value for the given types, or
@@ -155,46 +155,46 @@ RTLIB::Libcall RTLIB::getFPEXT(EVT OpVT, EVT RetVT) {
 RTLIB::Libcall RTLIB::getFPROUND(EVT OpVT, EVT RetVT) {
   if (RetVT == MVT::f16) {
     if (OpVT == MVT::f32)
-      return FPROUND_F32_F16;
+      return Libcall::FPROUND_F32_F16;
     if (OpVT == MVT::f64)
-      return FPROUND_F64_F16;
+      return Libcall::FPROUND_F64_F16;
     if (OpVT == MVT::f80)
-      return FPROUND_F80_F16;
+      return Libcall::FPROUND_F80_F16;
     if (OpVT == MVT::f128)
-      return FPROUND_F128_F16;
+      return Libcall::FPROUND_F128_F16;
     if (OpVT == MVT::ppcf128)
-      return FPROUND_PPCF128_F16;
+      return Libcall::FPROUND_PPCF128_F16;
   } else if (RetVT == MVT::bf16) {
     if (OpVT == MVT::f32)
-      return FPROUND_F32_BF16;
+      return Libcall::FPROUND_F32_BF16;
     if (OpVT == MVT::f64)
-      return FPROUND_F64_BF16;
+      return Libcall::FPROUND_F64_BF16;
     if (OpVT == MVT::f80)
-      return FPROUND_F80_BF16;
+      return Libcall::FPROUND_F80_BF16;
     if (OpVT == MVT::f128)
-      return FPROUND_F128_BF16;
+      return Libcall::FPROUND_F128_BF16;
   } else if (RetVT == MVT::f32) {
     if (OpVT == MVT::f64)
-      return FPROUND_F64_F32;
+      return Libcall::FPROUND_F64_F32;
     if (OpVT == MVT::f80)
-      return FPROUND_F80_F32;
+      return Libcall::FPROUND_F80_F32;
     if (OpVT == MVT::f128)
-      return FPROUND_F128_F32;
+      return Libcall::FPROUND_F128_F32;
     if (OpVT == MVT::ppcf128)
-      return FPROUND_PPCF128_F32;
+      return Libcall::FPROUND_PPCF128_F32;
   } else if (RetVT == MVT::f64) {
     if (OpVT == MVT::f80)
-      return FPROUND_F80_F64;
+      return Libcall::FPROUND_F80_F64;
     if (OpVT == MVT::f128)
-      return FPROUND_F128_F64;
+      return Libcall::FPROUND_F128_F64;
     if (OpVT == MVT::ppcf128)
-      return FPROUND_PPCF128_F64;
+      return Libcall::FPROUND_PPCF128_F64;
   } else if (RetVT == MVT::f80) {
     if (OpVT == MVT::f128)
-      return FPROUND_F128_F80;
+      return Libcall::FPROUND_F128_F80;
   }
 
-  return UNKNOWN_LIBCALL;
+  return Libcall::UNKNOWN_LIBCALL;
 }
 
 /// getFPTOSINT - Return the FPTOSINT_*_* value for the given types, or
@@ -202,48 +202,48 @@ RTLIB::Libcall RTLIB::getFPROUND(EVT OpVT, EVT RetVT) {
 RTLIB::Libcall RTLIB::getFPTOSINT(EVT OpVT, EVT RetVT) {
   if (OpVT == MVT::f16) {
     if (RetVT == MVT::i32)
-      return FPTOSINT_F16_I32;
+      return Libcall::FPTOSINT_F16_I32;
     if (RetVT == MVT::i64)
-      return FPTOSINT_F16_I64;
+      return Libcall::FPTOSINT_F16_I64;
     if (RetVT == MVT::i128)
-      return FPTOSINT_F16_I128;
+      return Libcall::FPTOSINT_F16_I128;
   } else if (OpVT == MVT::f32) {
     if (RetVT == MVT::i32)
-      return FPTOSINT_F32_I32;
+      return Libcall::FPTOSINT_F32_I32;
     if (RetVT == MVT::i64)
-      return FPTOSINT_F32_I64;
+      return Libcall::FPTOSINT_F32_I64;
     if (RetVT == MVT::i128)
-      return FPTOSINT_F32_I128;
+      return Libcall::FPTOSINT_F32_I128;
   } else if (OpVT == MVT::f64) {
     if (RetVT == MVT::i32)
-      return FPTOSINT_F64_I32;
+      return Libcall::FPTOSINT_F64_I32;
     if (RetVT == MVT::i64)
-      return FPTOSINT_F64_I64;
+      return Libcall::FPTOSINT_F64_I64;
     if (RetVT == MVT::i128)
-      return FPTOSINT_F64_I128;
+      return Libcall::FPTOSINT_F64_I128;
   } else if (OpVT == MVT::f80) {
     if (RetVT == MVT::i32)
-      return FPTOSINT_F80_I32;
+      return Libcall::FPTOSINT_F80_I32;
     if (RetVT == MVT::i64)
-      return FPTOSINT_F80_I64;
+      return Libcall::FPTOSINT_F80_I64;
     if (RetVT == MVT::i128)
-      return FPTOSINT_F80_I128;
+      return Libcall::FPTOSINT_F80_I128;
   } else if (OpVT == MVT::f128) {
     if (RetVT == MVT::i32)
-      return FPTOSINT_F128_I32;
+      return Libcall::FPTOSINT_F128_I32;
     if (RetVT == MVT::i64)
-      return FPTOSINT_F128_I64;
+      return Libcall::FPTOSINT_F128_I64;
     if (RetVT == MVT::i128)
-      return FPTOSINT_F128_I128;
+      return Libcall::FPTOSINT_F128_I128;
   } else if (OpVT == MVT::ppcf128) {
     if (RetVT == MVT::i32)
-      return FPTOSINT_PPCF128_I32;
+      return Libcall::FPTOSINT_PPCF128_I32;
     if (RetVT == MVT::i64)
-      return FPTOSINT_PPCF128_I64;
+      return Libcall::FPTOSINT_PPCF128_I64;
     if (RetVT == MVT::i128)
-      return FPTOSINT_PPCF128_I128;
+      return Libcall::FPTOSINT_PPCF128_I128;
   }
-  return UNKNOWN_LIBCALL;
+  return Libcall::UNKNOWN_LIBCALL;
 }
 
 /// getFPTOUINT - Return the FPTOUINT_*_* value for the given types, or
@@ -251,48 +251,48 @@ RTLIB::Libcall RTLIB::getFPTOSINT(EVT OpVT, EVT RetVT) {
 RTLIB::Libcall RTLIB::getFPTOUINT(EVT OpVT, EVT RetVT) {
   if (OpVT == MVT::f16) {
     if (RetVT == MVT::i32)
-      return FPTOUINT_F16_I32;
+      return Libcall::FPTOUINT_F16_I32;
     if (RetVT == MVT::i64)
-      return FPTOUINT_F16_I64;
+      return Libcall::FPTOUINT_F16_I64;
     if (RetVT == MVT::i128)
-      return FPTOUINT_F16_I128;
+      return Libcall::FPTOUINT_F16_I128;
   } else if (OpVT == MVT::f32) {
     if (RetVT == MVT::i32)
-      return FPTOUINT_F32_I32;
+      return Libcall::FPTOUINT_F32_I32;
     if (RetVT == MVT::i64)
-      return FPTOUINT_F32_I64;
+      return Libcall::FPTOUINT_F32_I64;
     if (RetVT == MVT::i128)
-      return FPTOUINT_F32_I128;
+      return Libcall::FPTOUINT_F32_I128;
   } else if (OpVT == MVT::f64) {
     if (RetVT == MVT::i32)
-      return FPTOUINT_F64_I32;
+      return Libcall::FPTOUINT_F64_I32;
     if (RetVT == MVT::i64)
-      return FPTOUINT_F64_I64;
+      return Libcall::FPTOUINT_F64_I64;
     if (RetVT == MVT::i128)
-      return FPTOUINT_F64_I128;
+      return Libcall::FPTOUINT_F64_I128;
   } else if (OpVT == MVT::f80) {
     if (RetVT == MVT::i32)
-      return FPTOUINT_F80_I32;
+      return Libcall::FPTOUINT_F80_I32;
     if (RetVT == MVT::i64)
-      return FPTOUINT_F80_I64;
+      return Libcall::FPTOUINT_F80_I64;
     if (RetVT == MVT::i128)
-      return FPTOUINT_F80_I128;
+      return Libcall::FPTOUINT_F80_I128;
   } else if (OpVT == MVT::f128) {
     if (RetVT == MVT::i32)
-      return FPTOUINT_F128_I32;
+      return Libcall::FPTOUINT_F128_I32;
     if (RetVT == MVT::i64)
-      return FPTOUINT_F128_I64;
+      return Libcall::FPTOUINT_F128_I64;
     if (RetVT == MVT::i128)
-      return FPTOUINT_F128_I128;
+      return Libcall::FPTOUINT_F128_I128;
   } else if (OpVT == MVT::ppcf128) {
     if (RetVT == MVT::i32)
-      return FPTOUINT_PPCF128_I32;
+      return Libcall::FPTOUINT_PPCF128_I32;
     if (RetVT == MVT::i64)
-      return FPTOUINT_PPCF128_I64;
+      return Libcall::FPTOUINT_PPCF128_I64;
     if (RetVT == MVT::i128)
-      return FPTOUINT_PPCF128_I128;
+      return Libcall::FPTOUINT_PPCF128_I128;
   }
-  return UNKNOWN_LIBCALL;
+  return Libcall::UNKNOWN_LIBCALL;
 }
 
 /// getSINTTOFP - Return the SINTTOFP_*_* value for the given types, or
@@ -300,47 +300,47 @@ RTLIB::Libcall RTLIB::getFPTOUINT(EVT OpVT, EVT RetVT) {
 RTLIB::Libcall RTLIB::getSINTTOFP(EVT OpVT, EVT RetVT) {
   if (OpVT == MVT::i32) {
     if (RetVT == MVT::f16)
-      return SINTTOFP_I32_F16;
+      return Libcall::SINTTOFP_I32_F16;
     if (RetVT == MVT::f32)
-      return SINTTOFP_I32_F32;
+      return Libcall::SINTTOFP_I32_F32;
     if (RetVT == MVT::f64)
-      return SINTTOFP_I32_F64;
+      return Libcall::SINTTOFP_I32_F64;
     if (RetVT == MVT::f80)
-      return SINTTOFP_I32_F80;
+      return Libcall::SINTTOFP_I32_F80;
     if (RetVT == MVT::f128)
-      return SINTTOFP_I32_F128;
+      return Libcall::SINTTOFP_I32_F128;
     if (RetVT == MVT::ppcf128)
-      return SINTTOFP_I32_PPCF128;
+      return Libcall::SINTTOFP_I32_PPCF128;
   } else if (OpVT == MVT::i64) {
     if (RetVT == MVT::bf16)
-      return SINTTOFP_I64_BF16;
+      return Libcall::SINTTOFP_I64_BF16;
     if (RetVT == MVT::f16)
-      return SINTTOFP_I64_F16;
+      return Libcall::SINTTOFP_I64_F16;
     if (RetVT == MVT::f32)
-      return SINTTOFP_I64_F32;
+      return Libcall::SINTTOFP_I64_F32;
     if (RetVT == MVT::f64)
-      return SINTTOFP_I64_F64;
+      return Libcall::SINTTOFP_I64_F64;
     if (RetVT == MVT::f80)
-      return SINTTOFP_I64_F80;
+      return Libcall::SINTTOFP_I64_F80;
     if (RetVT == MVT::f128)
-      return SINTTOFP_I64_F128;
+      return Libcall::SINTTOFP_I64_F128;
     if (RetVT == MVT::ppcf128)
-      return SINTTOFP_I64_PPCF128;
+      return Libcall::SINTTOFP_I64_PPCF128;
   } else if (OpVT == MVT::i128) {
     if (RetVT == MVT::f16)
-      return SINTTOFP_I128_F16;
+      return Libcall::SINTTOFP_I128_F16;
     if (RetVT == MVT::f32)
-      return SINTTOFP_I128_F32;
+      return Libcall::SINTTOFP_I128_F32;
     if (RetVT == MVT::f64)
-      return SINTTOFP_I128_F64;
+      return Libcall::SINTTOFP_I128_F64;
     if (RetVT == MVT::f80)
-      return SINTTOFP_I128_F80;
+      return Libcall::SINTTOFP_I128_F80;
     if (RetVT == MVT::f128)
-      return SINTTOFP_I128_F128;
+      return Libcall::SINTTOFP_I128_F128;
     if (RetVT == MVT::ppcf128)
-      return SINTTOFP_I128_PPCF128;
+      return Libcall::SINTTOFP_I128_PPCF128;
   }
-  return UNKNOWN_LIBCALL;
+  return Libcall::UNKNOWN_LIBCALL;
 }
 
 /// getUINTTOFP - Return the UINTTOFP_*_* value for the given types, or
@@ -348,89 +348,92 @@ RTLIB::Libcall RTLIB::getSINTTOFP(EVT OpVT, EVT RetVT) {
 RTLIB::Libcall RTLIB::getUINTTOFP(EVT OpVT, EVT RetVT) {
   if (OpVT == MVT::i32) {
     if (RetVT == MVT::f16)
-      return UINTTOFP_I32_F16;
+      return Libcall::UINTTOFP_I32_F16;
     if (RetVT == MVT::f32)
-      return UINTTOFP_I32_F32;
+      return Libcall::UINTTOFP_I32_F32;
     if (RetVT == MVT::f64)
-      return UINTTOFP_I32_F64;
+      return Libcall::UINTTOFP_I32_F64;
     if (RetVT == MVT::f80)
-      return UINTTOFP_I32_F80;
+      return Libcall::UINTTOFP_I32_F80;
     if (RetVT == MVT::f128)
-      return UINTTOFP_I32_F128;
+      return Libcall::UINTTOFP_I32_F128;
     if (RetVT == MVT::ppcf128)
-      return UINTTOFP_I32_PPCF128;
+      return Libcall::UINTTOFP_I32_PPCF128;
   } else if (OpVT == MVT::i64) {
     if (RetVT == MVT::bf16)
-      return UINTTOFP_I64_BF16;
+      return Libcall::UINTTOFP_I64_BF16;
     if (RetVT == MVT::f16)
-      return UINTTOFP_I64_F16;
+      return Libcall::UINTTOFP_I64_F16;
     if (RetVT == MVT::f32)
-      return UINTTOFP_I64_F32;
+      return Libcall::UINTTOFP_I64_F32;
     if (RetVT == MVT::f64)
-      return UINTTOFP_I64_F64;
+      return Libcall::UINTTOFP_I64_F64;
     if (RetVT == MVT::f80)
-      return UINTTOFP_I64_F80;
+      return Libcall::UINTTOFP_I64_F80;
     if (RetVT == MVT::f128)
-      return UINTTOFP_I64_F128;
+      return Libcall::UINTTOFP_I64_F128;
     if (RetVT == MVT::ppcf128)
-      return UINTTOFP_I64_PPCF128;
+      return Libcall::UINTTOFP_I64_PPCF128;
   } else if (OpVT == MVT::i128) {
     if (RetVT == MVT::f16)
-      return UINTTOFP_I128_F16;
+      return Libcall::UINTTOFP_I128_F16;
     if (RetVT == MVT::f32)
-      return UINTTOFP_I128_F32;
+      return Libcall::UINTTOFP_I128_F32;
     if (RetVT == MVT::f64)
-      return UINTTOFP_I128_F64;
+      return Libcall::UINTTOFP_I128_F64;
     if (RetVT == MVT::f80)
-      return UINTTOFP_I128_F80;
+      return Libcall::UINTTOFP_I128_F80;
     if (RetVT == MVT::f128)
-      return UINTTOFP_I128_F128;
+      return Libcall::UINTTOFP_I128_F128;
     if (RetVT == MVT::ppcf128)
-      return UINTTOFP_I128_PPCF128;
+      return Libcall::UINTTOFP_I128_PPCF128;
   }
-  return UNKNOWN_LIBCALL;
+  return Libcall::UNKNOWN_LIBCALL;
 }
 
 RTLIB::Libcall RTLIB::getPOWI(EVT RetVT) {
-  return getFPLibCall(RetVT, POWI_F32, POWI_F64, POWI_F80, POWI_F128,
-                      POWI_PPCF128);
+  return getFPLibCall(RetVT, Libcall::POWI_F32, Libcall::POWI_F64,
+                      Libcall::POWI_F80, Libcall::POWI_F128,
+                      Libcall::POWI_PPCF128);
 }
 
 RTLIB::Libcall RTLIB::getPOW(EVT RetVT) {
-  return getFPLibCall(RetVT, POW_F32, POW_F64, POW_F80, POW_F128, POW_PPCF128);
+  return getFPLibCall(RetVT, Libcall::POW_F32, Libcall::POW_F64,
+                      Libcall::POW_F80, Libcall::POW_F128,
+                      Libcall::POW_PPCF128);
 }
 
 RTLIB::Libcall RTLIB::getLDEXP(EVT RetVT) {
-  return getFPLibCall(RetVT, LDEXP_F32, LDEXP_F64, LDEXP_F80, LDEXP_F128,
-                      LDEXP_PPCF128);
+  return getFPLibCall(RetVT, Libcall::LDEXP_F32, Libcall::LDEXP_F64, Libcall::LDEXP_F80, Libcall::LDEXP_F128,
+                      Libcall::LDEXP_PPCF128);
 }
 
 RTLIB::Libcall RTLIB::getFREXP(EVT RetVT) {
-  return getFPLibCall(RetVT, FREXP_F32, FREXP_F64, FREXP_F80, FREXP_F128,
-                      FREXP_PPCF128);
+  return getFPLibCall(RetVT, Libcall::FREXP_F32, Libcall::FREXP_F64, Libcall::FREXP_F80, Libcall::FREXP_F128,
+                      Libcall::FREXP_PPCF128);
 }
 
 RTLIB::Libcall RTLIB::getSIN(EVT RetVT) {
-  return getFPLibCall(RetVT, SIN_F32, SIN_F64, SIN_F80, SIN_F128, SIN_PPCF128);
+  return getFPLibCall(RetVT, Libcall::SIN_F32, Libcall::SIN_F64, Libcall::SIN_F80, Libcall::SIN_F128, Libcall::SIN_PPCF128);
 }
 
 RTLIB::Libcall RTLIB::getCOS(EVT RetVT) {
-  return getFPLibCall(RetVT, COS_F32, COS_F64, COS_F80, COS_F128, COS_PPCF128);
+  return getFPLibCall(RetVT, Libcall::COS_F32, Libcall::COS_F64, Libcall::COS_F80, Libcall::COS_F128, Libcall::COS_PPCF128);
 }
 
 RTLIB::Libcall RTLIB::getSINCOS(EVT RetVT) {
-  return getFPLibCall(RetVT, SINCOS_F32, SINCOS_F64, SINCOS_F80, SINCOS_F128,
-                      SINCOS_PPCF128);
+  return getFPLibCall(RetVT, Libcall::SINCOS_F32, Libcall::SINCOS_F64, Libcall::SINCOS_F80, Libcall::SINCOS_F128,
+                      Libcall::SINCOS_PPCF128);
 }
 
 RTLIB::Libcall RTLIB::getSINCOSPI(EVT RetVT) {
-  return getFPLibCall(RetVT, SINCOSPI_F32, SINCOSPI_F64, SINCOSPI_F80,
-                      SINCOSPI_F128, SINCOSPI_PPCF128);
+  return getFPLibCall(RetVT, Libcall::SINCOSPI_F32, Libcall::SINCOSPI_F64, Libcall::SINCOSPI_F80,
+                      Libcall::SINCOSPI_F128, Libcall::SINCOSPI_PPCF128);
 }
 
 RTLIB::Libcall RTLIB::getMODF(EVT RetVT) {
-  return getFPLibCall(RetVT, MODF_F32, MODF_F64, MODF_F80, MODF_F128,
-                      MODF_PPCF128);
+  return getFPLibCall(RetVT, Libcall::MODF_F32, Libcall::MODF_F64, Libcall::MODF_F80, Libcall::MODF_F128,
+                      Libcall::MODF_PPCF128);
 }
 
 RTLIB::Libcall RTLIB::getOutlineAtomicHelper(const Libcall (&LC)[5][4],
@@ -454,7 +457,7 @@ RTLIB::Libcall RTLIB::getOutlineAtomicHelper(const Libcall (&LC)[5][4],
     ModeN = 4;
     break;
   default:
-    return RTLIB::UNKNOWN_LIBCALL;
+    return Libcall::UNKNOWN_LIBCALL;
   }
 
   switch (Order) {
@@ -472,7 +475,7 @@ RTLIB::Libcall RTLIB::getOutlineAtomicHelper(const Libcall (&LC)[5][4],
     ModelN = 3;
     break;
   default:
-    return UNKNOWN_LIBCALL;
+    return Libcall::UNKNOWN_LIBCALL;
   }
 
   return LC[ModeN][ModelN];
@@ -481,11 +484,12 @@ RTLIB::Libcall RTLIB::getOutlineAtomicHelper(const Libcall (&LC)[5][4],
 RTLIB::Libcall RTLIB::getOUTLINE_ATOMIC(unsigned Opc, AtomicOrdering Order,
                                         MVT VT) {
   if (!VT.isScalarInteger())
-    return UNKNOWN_LIBCALL;
+    return Libcall::UNKNOWN_LIBCALL;
   uint64_t MemSize = VT.getScalarSizeInBits() / 8;
 
 #define LCALLS(A, B)                                                           \
-  { A##B##_RELAX, A##B##_ACQ, A##B##_REL, A##B##_ACQ_REL }
+  {Libcall::A##B##_RELAX, Libcall::A##B##_ACQ, Libcall::A##B##_REL,            \
+   Libcall::A##B##_ACQ_REL}
 #define LCALL5(A)                                                              \
   LCALLS(A, 1), LCALLS(A, 2), LCALLS(A, 4), LCALLS(A, 8), LCALLS(A, 16)
   switch (Opc) {
@@ -514,7 +518,7 @@ RTLIB::Libcall RTLIB::getOUTLINE_ATOMIC(unsigned Opc, AtomicOrdering Order,
     return getOutlineAtomicHelper(LC, Order, MemSize);
   }
   default:
-    return UNKNOWN_LIBCALL;
+    return Libcall::UNKNOWN_LIBCALL;
   }
 #undef LCALLS
 #undef LCALL5
@@ -525,17 +529,17 @@ RTLIB::Libcall RTLIB::getSYNC(unsigned Opc, MVT VT) {
   case Name:                                                                   \
     switch (VT.SimpleTy) {                                                     \
     default:                                                                   \
-      return UNKNOWN_LIBCALL;                                                  \
+      return Libcall::UNKNOWN_LIBCALL;                                         \
     case MVT::i8:                                                              \
-      return Enum##_1;                                                         \
+      return Libcall::Enum##_1;                                                \
     case MVT::i16:                                                             \
-      return Enum##_2;                                                         \
+      return Libcall::Enum##_2;                                                \
     case MVT::i32:                                                             \
-      return Enum##_4;                                                         \
+      return Libcall::Enum##_4;                                                \
     case MVT::i64:                                                             \
-      return Enum##_8;                                                         \
+      return Libcall::Enum##_8;                                                \
     case MVT::i128:                                                            \
-      return Enum##_16;                                                        \
+      return Libcall::Enum##_16;                                               \
     }
 
   switch (Opc) {
@@ -555,80 +559,80 @@ RTLIB::Libcall RTLIB::getSYNC(unsigned Opc, MVT VT) {
 
 #undef OP_TO_LIBCALL
 
-  return UNKNOWN_LIBCALL;
+  return Libcall::UNKNOWN_LIBCALL;
 }
 
 RTLIB::Libcall RTLIB::getMEMCPY_ELEMENT_UNORDERED_ATOMIC(uint64_t ElementSize) {
   switch (ElementSize) {
   case 1:
-    return MEMCPY_ELEMENT_UNORDERED_ATOMIC_1;
+    return Libcall::MEMCPY_ELEMENT_UNORDERED_ATOMIC_1;
   case 2:
-    return MEMCPY_ELEMENT_UNORDERED_ATOMIC_2;
+    return Libcall::MEMCPY_ELEMENT_UNORDERED_ATOMIC_2;
   case 4:
-    return MEMCPY_ELEMENT_UNORDERED_ATOMIC_4;
+    return Libcall::MEMCPY_ELEMENT_UNORDERED_ATOMIC_4;
   case 8:
-    return MEMCPY_ELEMENT_UNORDERED_ATOMIC_8;
+    return Libcall::MEMCPY_ELEMENT_UNORDERED_ATOMIC_8;
   case 16:
-    return MEMCPY_ELEMENT_UNORDERED_ATOMIC_16;
+    return Libcall::MEMCPY_ELEMENT_UNORDERED_ATOMIC_16;
   default:
-    return UNKNOWN_LIBCALL;
+    return Libcall::UNKNOWN_LIBCALL;
   }
 }
 
 RTLIB::Libcall RTLIB::getMEMMOVE_ELEMENT_UNORDERED_ATOMIC(uint64_t ElementSize) {
   switch (ElementSize) {
   case 1:
-    return MEMMOVE_ELEMENT_UNORDERED_ATOMIC_1;
+    return Libcall::MEMMOVE_ELEMENT_UNORDERED_ATOMIC_1;
   case 2:
-    return MEMMOVE_ELEMENT_UNORDERED_ATOMIC_2;
+    return Libcall::MEMMOVE_ELEMENT_UNORDERED_ATOMIC_2;
   case 4:
-    return MEMMOVE_ELEMENT_UNORDERED_ATOMIC_4;
+    return Libcall::MEMMOVE_ELEMENT_UNORDERED_ATOMIC_4;
   case 8:
-    return MEMMOVE_ELEMENT_UNORDERED_ATOMIC_8;
+    return Libcall::MEMMOVE_ELEMENT_UNORDERED_ATOMIC_8;
   case 16:
-    return MEMMOVE_ELEMENT_UNORDERED_ATOMIC_16;
+    return Libcall::MEMMOVE_ELEMENT_UNORDERED_ATOMIC_16;
   default:
-    return UNKNOWN_LIBCALL;
+    return Libcall::UNKNOWN_LIBCALL;
   }
 }
 
 RTLIB::Libcall RTLIB::getMEMSET_ELEMENT_UNORDERED_ATOMIC(uint64_t ElementSize) {
   switch (ElementSize) {
   case 1:
-    return MEMSET_ELEMENT_UNORDERED_ATOMIC_1;
+    return Libcall::MEMSET_ELEMENT_UNORDERED_ATOMIC_1;
   case 2:
-    return MEMSET_ELEMENT_UNORDERED_ATOMIC_2;
+    return Libcall::MEMSET_ELEMENT_UNORDERED_ATOMIC_2;
   case 4:
-    return MEMSET_ELEMENT_UNORDERED_ATOMIC_4;
+    return Libcall::MEMSET_ELEMENT_UNORDERED_ATOMIC_4;
   case 8:
-    return MEMSET_ELEMENT_UNORDERED_ATOMIC_8;
+    return Libcall::MEMSET_ELEMENT_UNORDERED_ATOMIC_8;
   case 16:
-    return MEMSET_ELEMENT_UNORDERED_ATOMIC_16;
+    return Libcall::MEMSET_ELEMENT_UNORDERED_ATOMIC_16;
   default:
-    return UNKNOWN_LIBCALL;
+    return Libcall::UNKNOWN_LIBCALL;
   }
 }
 
 ISD::CondCode TargetLoweringBase::getSoftFloatCmpLibcallPredicate(
     RTLIB::LibcallImpl Impl) const {
   switch (Impl) {
-  case RTLIB::__aeabi_dcmpeq__une:
-  case RTLIB::__aeabi_fcmpeq__une:
+  case RTLIB::LibcallImpl::__aeabi_dcmpeq__une:
+  case RTLIB::LibcallImpl::__aeabi_fcmpeq__une:
     // Usage in the eq case, so we have to invert the comparison.
     return ISD::SETEQ;
-  case RTLIB::__aeabi_dcmpeq__oeq:
-  case RTLIB::__aeabi_fcmpeq__oeq:
+  case RTLIB::LibcallImpl::__aeabi_dcmpeq__oeq:
+  case RTLIB::LibcallImpl::__aeabi_fcmpeq__oeq:
     // Normal comparison to boolean value.
     return ISD::SETNE;
-  case RTLIB::__aeabi_dcmplt:
-  case RTLIB::__aeabi_dcmple:
-  case RTLIB::__aeabi_dcmpge:
-  case RTLIB::__aeabi_dcmpgt:
-  case RTLIB::__aeabi_dcmpun:
-  case RTLIB::__aeabi_fcmplt:
-  case RTLIB::__aeabi_fcmple:
-  case RTLIB::__aeabi_fcmpge:
-  case RTLIB::__aeabi_fcmpgt:
+  case RTLIB::LibcallImpl::__aeabi_dcmplt:
+  case RTLIB::LibcallImpl::__aeabi_dcmple:
+  case RTLIB::LibcallImpl::__aeabi_dcmpge:
+  case RTLIB::LibcallImpl::__aeabi_dcmpgt:
+  case RTLIB::LibcallImpl::__aeabi_dcmpun:
+  case RTLIB::LibcallImpl::__aeabi_fcmplt:
+  case RTLIB::LibcallImpl::__aeabi_fcmple:
+  case RTLIB::LibcallImpl::__aeabi_fcmpge:
+  case RTLIB::LibcallImpl::__aeabi_fcmpgt:
     /// The AEABI versions return a typical boolean value, so we can compare
     /// against the integer result as simply != 0.
     return ISD::SETNE;
@@ -644,40 +648,40 @@ ISD::CondCode TargetLoweringBase::getSoftFloatCmpLibcallPredicate(
   // soft FP libcall instead of individual compares.
   RTLIB::Libcall LC = RTLIB::RuntimeLibcallsInfo::getLibcallFromImpl(Impl);
   switch (LC) {
-  case RTLIB::OEQ_F32:
-  case RTLIB::OEQ_F64:
-  case RTLIB::OEQ_F128:
-  case RTLIB::OEQ_PPCF128:
+  case RTLIB::Libcall::OEQ_F32:
+  case RTLIB::Libcall::OEQ_F64:
+  case RTLIB::Libcall::OEQ_F128:
+  case RTLIB::Libcall::OEQ_PPCF128:
     return ISD::SETEQ;
-  case RTLIB::UNE_F32:
-  case RTLIB::UNE_F64:
-  case RTLIB::UNE_F128:
-  case RTLIB::UNE_PPCF128:
+  case RTLIB::Libcall::UNE_F32:
+  case RTLIB::Libcall::UNE_F64:
+  case RTLIB::Libcall::UNE_F128:
+  case RTLIB::Libcall::UNE_PPCF128:
     return ISD::SETNE;
-  case RTLIB::OGE_F32:
-  case RTLIB::OGE_F64:
-  case RTLIB::OGE_F128:
-  case RTLIB::OGE_PPCF128:
+  case RTLIB::Libcall::OGE_F32:
+  case RTLIB::Libcall::OGE_F64:
+  case RTLIB::Libcall::OGE_F128:
+  case RTLIB::Libcall::OGE_PPCF128:
     return ISD::SETGE;
-  case RTLIB::OLT_F32:
-  case RTLIB::OLT_F64:
-  case RTLIB::OLT_F128:
-  case RTLIB::OLT_PPCF128:
+  case RTLIB::Libcall::OLT_F32:
+  case RTLIB::Libcall::OLT_F64:
+  case RTLIB::Libcall::OLT_F128:
+  case RTLIB::Libcall::OLT_PPCF128:
     return ISD::SETLT;
-  case RTLIB::OLE_F32:
-  case RTLIB::OLE_F64:
-  case RTLIB::OLE_F128:
-  case RTLIB::OLE_PPCF128:
+  case RTLIB::Libcall::OLE_F32:
+  case RTLIB::Libcall::OLE_F64:
+  case RTLIB::Libcall::OLE_F128:
+  case RTLIB::Libcall::OLE_PPCF128:
     return ISD::SETLE;
-  case RTLIB::OGT_F32:
-  case RTLIB::OGT_F64:
-  case RTLIB::OGT_F128:
-  case RTLIB::OGT_PPCF128:
+  case RTLIB::Libcall::OGT_F32:
+  case RTLIB::Libcall::OGT_F64:
+  case RTLIB::Libcall::OGT_F128:
+  case RTLIB::Libcall::OGT_PPCF128:
     return ISD::SETGT;
-  case RTLIB::UO_F32:
-  case RTLIB::UO_F64:
-  case RTLIB::UO_F128:
-  case RTLIB::UO_PPCF128:
+  case RTLIB::Libcall::UO_F32:
+  case RTLIB::Libcall::UO_F64:
+  case RTLIB::Libcall::UO_F128:
+  case RTLIB::Libcall::UO_PPCF128:
     return ISD::SETNE;
   default:
     llvm_unreachable("not a compare libcall");

@@ -155,9 +155,9 @@ static bool optimizeCall(MachineBasicBlock &MBB, MachineInstr &MI,
     return false;
 
   StringRef Name(Op1.getSymbolName());
-  bool CallReturnsInput = Name == TLI.getLibcallName(RTLIB::MEMCPY) ||
-                          Name == TLI.getLibcallName(RTLIB::MEMMOVE) ||
-                          Name == TLI.getLibcallName(RTLIB::MEMSET);
+  bool CallReturnsInput = Name == TLI.getLibcallName(RTLIB::Libcall::MEMCPY) ||
+                          Name == TLI.getLibcallName(RTLIB::Libcall::MEMMOVE) ||
+                          Name == TLI.getLibcallName(RTLIB::Libcall::MEMSET);
   if (!CallReturnsInput)
     return false;
 

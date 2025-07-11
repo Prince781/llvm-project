@@ -7693,7 +7693,7 @@ SDValue RISCVTargetLowering::LowerOperation(SDValue Op,
                       ? DAG.getNode(RISCVISD::FMV_W_X_RV64, DL, MVT::f32, Op0)
                       : DAG.getBitcast(MVT::f32, Op0);
     SDValue Res;
-    std::tie(Res, Chain) = makeLibCall(DAG, RTLIB::FPEXT_F16_F32, MVT::f32, Arg,
+    std::tie(Res, Chain) = makeLibCall(DAG, RTLIB::Libcall::FPEXT_F16_F32, MVT::f32, Arg,
                                        CallOptions, DL, Chain);
     if (IsStrict)
       return DAG.getMergeValues({Res, Chain}, DL);
@@ -8381,7 +8381,7 @@ SDValue RISCVTargetLowering::emitFlushICache(SelectionDAG &DAG, SDValue InChain,
                                              SDValue Flags, SDLoc DL) const {
   MakeLibCallOptions CallOptions;
   std::pair<SDValue, SDValue> CallResult =
-      makeLibCall(DAG, RTLIB::RISCV_FLUSH_ICACHE, MVT::isVoid,
+      makeLibCall(DAG, RTLIB::Libcall::RISCV_FLUSH_ICACHE, MVT::isVoid,
                   {Start, End, Flags}, CallOptions, DL, InChain);
 
   // This function returns void so only the out chain matters.
@@ -14144,7 +14144,7 @@ void RISCVTargetLowering::ReplaceNodeResults(SDNode *N,
     // need to truncate the result. We assume any value that doesn't fit in i32
     // is allowed to return an unspecified value.
     RTLIB::Libcall LC =
-        Op0.getValueType() == MVT::f64 ? RTLIB::LROUND_F64 : RTLIB::LROUND_F32;
+        Op0.getValueType() == MVT::f64 ? RTLIB::Libcall::LROUND_F64 : RTLIB::Libcall::LROUND_F32;
     MakeLibCallOptions CallOptions;
     EVT OpVT = Op0.getValueType();
     CallOptions.setTypeListBeforeSoften(OpVT, MVT::i64, true);

@@ -3547,10 +3547,10 @@ bool AArch64FastISel::fastLowerIntrinsicCall(const IntrinsicInst *II) {
       return false;
 
     static const RTLIB::Libcall LibCallTable[4][2] = {
-        {RTLIB::SIN_F32, RTLIB::SIN_F64},
-        {RTLIB::COS_F32, RTLIB::COS_F64},
-        {RTLIB::TAN_F32, RTLIB::TAN_F64},
-        {RTLIB::POW_F32, RTLIB::POW_F64}};
+        {RTLIB::Libcall::SIN_F32, RTLIB::Libcall::SIN_F64},
+        {RTLIB::Libcall::COS_F32, RTLIB::Libcall::COS_F64},
+        {RTLIB::Libcall::TAN_F32, RTLIB::Libcall::TAN_F64},
+        {RTLIB::Libcall::POW_F32, RTLIB::Libcall::POW_F64}};
     RTLIB::Libcall LC;
     bool Is64Bit = RetVT == MVT::f64;
     switch (II->getIntrinsicID()) {
@@ -4859,10 +4859,10 @@ bool AArch64FastISel::selectFRem(const Instruction *I) {
   default:
     return false;
   case MVT::f32:
-    LC = RTLIB::REM_F32;
+    LC = RTLIB::Libcall::REM_F32;
     break;
   case MVT::f64:
-    LC = RTLIB::REM_F64;
+    LC = RTLIB::Libcall::REM_F64;
     break;
   }
 

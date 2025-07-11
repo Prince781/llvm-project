@@ -49,7 +49,7 @@ def MSP430LibraryWithCondCC : SystemRuntimeLibrary<isMSP430,
 // CHECK-NEXT:   }
 // CHECK-EMPTY:
 // CHECK-NEXT:    static const LibcallImplPair LibraryCalls[] = {
-// CHECK-NEXT:        {RTLIB::MALLOC, RTLIB::malloc}, // malloc
+// CHECK-NEXT:        {RTLIB::Libcall::MALLOC, RTLIB::LibcallImpl::malloc}, // malloc
 // CHECK-NEXT:    };
 // CHECK-EMPTY:
 // CHECK-NEXT:    for (const auto [Func, Impl] : LibraryCalls) {
@@ -57,8 +57,8 @@ def MSP430LibraryWithCondCC : SystemRuntimeLibrary<isMSP430,
 // CHECK-NEXT:    }
 // CHECK-EMPTY:
 // CHECK-NEXT:    static const LibcallImplPair LibraryCalls_AlwaysAvailable[] = {
-// CHECK-NEXT:        {RTLIB::SDIVREM_I8, RTLIB::__divmodqi4}, // __divmodqi4
-// CHECK-NEXT:        {RTLIB::UDIVREM_I16, RTLIB::__udivmodhi4}, // __udivmodhi4
+// CHECK-NEXT:        {RTLIB::Libcall::SDIVREM_I8, RTLIB::LibcallImpl::__divmodqi4}, // __divmodqi4
+// CHECK-NEXT:        {RTLIB::Libcall::UDIVREM_I16, RTLIB::LibcallImpl::__udivmodhi4}, // __udivmodhi4
 // CHECK-NEXT:    };
 // CHECK-EMPTY:
 // CHECK-NEXT:    for (const auto [Func, Impl] : LibraryCalls_AlwaysAvailable) {
@@ -71,7 +71,7 @@ def MSP430LibraryWithCondCC : SystemRuntimeLibrary<isMSP430,
 // CHECK-EMPTY:
 // CHECK-NEXT: if (TT.getArch() == Triple::avr) {
 // CHECK-NEXT:   static const LibcallImplPair LibraryCalls[] = {
-// CHECK-NEXT:       {RTLIB::MALLOC, RTLIB::malloc}, // malloc
+// CHECK-NEXT:       {RTLIB::Libcall::MALLOC, RTLIB::LibcallImpl::malloc}, // malloc
 // CHECK-NEXT:   };
 // CHECK-EMPTY:
 // CHECK-NEXT:   for (const auto [Func, Impl] : LibraryCalls) {
@@ -79,8 +79,8 @@ def MSP430LibraryWithCondCC : SystemRuntimeLibrary<isMSP430,
 // CHECK-NEXT:   }
 // CHECK-EMPTY:
 // CHECK-NEXT:   static const LibcallImplPair LibraryCalls_AlwaysAvailable[] = {
-// CHECK-NEXT:       {RTLIB::SDIVREM_I8, RTLIB::__divmodqi4}, // __divmodqi4
-// CHECK-NEXT:       {RTLIB::UDIVREM_I16, RTLIB::__udivmodhi4}, // __udivmodhi4
+// CHECK-NEXT:       {RTLIB::Libcall::SDIVREM_I8, RTLIB::LibcallImpl::__divmodqi4}, // __divmodqi4
+// CHECK-NEXT:       {RTLIB::Libcall::UDIVREM_I16, RTLIB::LibcallImpl::__udivmodhi4}, // __udivmodhi4
 // CHECK-NEXT:   };
 // CHECK-EMPTY:
 // CHECK-NEXT:   for (const auto [Func, Impl] : LibraryCalls_AlwaysAvailable) {
@@ -93,7 +93,7 @@ def MSP430LibraryWithCondCC : SystemRuntimeLibrary<isMSP430,
 // CHECK-EMPTY:
 // CHECK-NEXT:  if (TT.getArch() == Triple::msp430) {
 // CHECK-NEXT:    static const LibcallImplPair LibraryCalls[] = {
-// CHECK-NEXT:        {RTLIB::MALLOC, RTLIB::malloc}, // malloc
+// CHECK-NEXT:        {RTLIB::Libcall::MALLOC, RTLIB::LibcallImpl::malloc}, // malloc
 // CHECK-NEXT:    };
 // CHECK-EMPTY:
 // CHECK-NEXT:    for (const auto [Func, Impl] : LibraryCalls) {
@@ -102,7 +102,7 @@ def MSP430LibraryWithCondCC : SystemRuntimeLibrary<isMSP430,
 // CHECK-EMPTY:
 // CHECK-NEXT:    if ( isFoo() ) {
 // CHECK-NEXT:      static const LibcallImplPair LibraryCalls_anonymous_3[] = {
-// CHECK-NEXT:          {RTLIB::SDIVREM_I8, RTLIB::__divmodqi4}, // __divmodqi4
+// CHECK-NEXT:          {RTLIB::Libcall::SDIVREM_I8, RTLIB::LibcallImpl::__divmodqi4}, // __divmodqi4
 // CHECK-NEXT:      };
 // CHECK-EMPTY:
 // CHECK-NEXT:      for (const auto [Func, Impl] : LibraryCalls_anonymous_3) {
@@ -114,7 +114,7 @@ def MSP430LibraryWithCondCC : SystemRuntimeLibrary<isMSP430,
 // CHECK-EMPTY:
 // CHECK-NEXT:    if ( isBar() ) {
 // CHECK-NEXT:      static const LibcallImplPair LibraryCalls_anonymous_5[] = {
-// CHECK-NEXT:          {RTLIB::UDIVREM_I16, RTLIB::__udivmodhi4}, // __udivmodhi4
+// CHECK-NEXT:          {RTLIB::Libcall::UDIVREM_I16, RTLIB::LibcallImpl::__udivmodhi4}, // __udivmodhi4
 // CHECK-NEXT:      };
 // CHECK-EMPTY:
 // CHECK-NEXT:      for (const auto [Func, Impl] : LibraryCalls_anonymous_5) {

@@ -343,7 +343,7 @@ bool PreISelIntrinsicLowering::expandMemIntrinsicUses(
       const TargetTransformInfo &TTI = LookupTTI(*ParentFunc);
       if (shouldExpandMemIntrinsicWithSize(Memmove->getLength(), TTI)) {
         if (UseMemIntrinsicLibFunc &&
-            canEmitLibcall(TM, ParentFunc, RTLIB::MEMMOVE))
+            canEmitLibcall(TM, ParentFunc, RTLIB::Libcall::MEMMOVE))
           break;
 
         if (expandMemMoveAsLoop(Memmove, TTI)) {
@@ -360,7 +360,7 @@ bool PreISelIntrinsicLowering::expandMemIntrinsicUses(
       const TargetTransformInfo &TTI = LookupTTI(*ParentFunc);
       if (shouldExpandMemIntrinsicWithSize(Memset->getLength(), TTI)) {
         if (UseMemIntrinsicLibFunc &&
-            canEmitLibcall(TM, ParentFunc, RTLIB::MEMSET))
+            canEmitLibcall(TM, ParentFunc, RTLIB::Libcall::MEMSET))
           break;
 
         expandMemSetAsLoop(Memset);

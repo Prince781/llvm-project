@@ -3206,7 +3206,7 @@ void SelectionDAGBuilder::visitSPDescriptorFailure(
   } else {
     TargetLowering::MakeLibCallOptions CallOptions;
     CallOptions.setDiscardResult(true);
-    Chain = TLI.makeLibCall(DAG, RTLIB::STACKPROTECTOR_CHECK_FAIL, MVT::isVoid,
+    Chain = TLI.makeLibCall(DAG, RTLIB::Libcall::STACKPROTECTOR_CHECK_FAIL, MVT::isVoid,
                             {}, CallOptions, getCurSDLoc())
                 .second;
   }

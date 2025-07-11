@@ -2521,7 +2521,7 @@ bool SelectionDAG::expandMultipleResultFPLibCall(
   EVT VT = Node->getValueType(0);
   unsigned NumResults = Node->getNumValues();
 
-  if (LC == RTLIB::UNKNOWN_LIBCALL)
+  if (LC == RTLIB::Libcall::UNKNOWN_LIBCALL)
     return false;
 
   const char *LCName = TLI->getLibcallName(LC);
@@ -8897,7 +8897,7 @@ SDValue SelectionDAG::getMemcpy(
   CLI.setDebugLoc(dl)
       .setChain(Chain)
       .setLibCallee(
-          TLI->getLibcallCallingConv(RTLIB::MEMCPY),
+          TLI->getLibcallCallingConv(RTLIB::Libcall::MEMCPY),
           Dst.getValueType().getTypeForEVT(*getContext()),
           getExternalSymbol(MemCpyName, TLI->getPointerTy(getDataLayout())),
           std::move(Args))
@@ -8930,7 +8930,7 @@ SDValue SelectionDAG::getAtomicMemcpy(SDValue Chain, const SDLoc &dl,
 
   RTLIB::Libcall LibraryCall =
       RTLIB::getMEMCPY_ELEMENT_UNORDERED_ATOMIC(ElemSz);
-  if (LibraryCall == RTLIB::UNKNOWN_LIBCALL)
+  if (LibraryCall == RTLIB::Libcall::UNKNOWN_LIBCALL)
     report_fatal_error("Unsupported element size");
 
   TargetLowering::CallLoweringInfo CLI(*this);
@@ -9004,7 +9004,7 @@ SDValue SelectionDAG::getMemmove(SDValue Chain, const SDLoc &dl, SDValue Dst,
     IsTailCall = *OverrideTailCall;
   } else {
     bool LowersToMemmove =
-        TLI->getLibcallName(RTLIB::MEMMOVE) == StringRef("memmove");
+        TLI->getLibcallName(RTLIB::Libcall::MEMMOVE) == StringRef("memmove");
     bool ReturnsFirstArg = CI && funcReturnsFirstArgOfCall(*CI);
     IsTailCall = CI && CI->isTailCall() &&
                  isInTailCallPosition(*CI, getTarget(),
@@ -9013,9 +9013,9 @@ SDValue SelectionDAG::getMemmove(SDValue Chain, const SDLoc &dl, SDValue Dst,
 
   CLI.setDebugLoc(dl)
       .setChain(Chain)
-      .setLibCallee(TLI->getLibcallCallingConv(RTLIB::MEMMOVE),
+      .setLibCallee(TLI->getLibcallCallingConv(RTLIB::Libcall::MEMMOVE),
                     Dst.getValueType().getTypeForEVT(*getContext()),
-                    getExternalSymbol(TLI->getLibcallName(RTLIB::MEMMOVE),
+                    getExternalSymbol(TLI->getLibcallName(RTLIB::Libcall::MEMMOVE),
                                       TLI->getPointerTy(getDataLayout())),
                     std::move(Args))
       .setDiscardResult()
@@ -9047,7 +9047,7 @@ SDValue SelectionDAG::getAtomicMemmove(SDValue Chain, const SDLoc &dl,
 
   RTLIB::Libcall LibraryCall =
       RTLIB::getMEMMOVE_ELEMENT_UNORDERED_ATOMIC(ElemSz);
-  if (LibraryCall == RTLIB::UNKNOWN_LIBCALL)
+  if (LibraryCall == RTLIB::Libcall::UNKNOWN_LIBCALL)
     report_fatal_error("Unsupported element size");
 
   TargetLowering::CallLoweringInfo CLI(*this);
@@ -9118,7 +9118,8 @@ SDValue SelectionDAG::getMemset(SDValue Chain, const SDLoc &dl, SDValue Dst,
   // FIXME: pass in SDLoc
   CLI.setDebugLoc(dl).setChain(Chain);
 
-  const char *BzeroName = getTargetLoweringInfo().getLibcallName(RTLIB::BZERO);
+  const char *BzeroName =
+      getTargetLoweringInfo().getLibcallName(RTLIB::Libcall::BZERO);
 
   // Helper function to create an Entry from Node and Type.
   const auto CreateEntry = [](SDValue Node, Type *Ty) {
@@ -9135,21 +9136,21 @@ SDValue SelectionDAG::getMemset(SDValue Chain, const SDLoc &dl, SDValue Dst,
     Args.push_back(CreateEntry(Dst, PointerType::getUnqual(Ctx)));
     Args.push_back(CreateEntry(Size, DL.getIntPtrType(Ctx)));
     CLI.setLibCallee(
-        TLI->getLibcallCallingConv(RTLIB::BZERO), Type::getVoidTy(Ctx),
+        TLI->getLibcallCallingConv(RTLIB::Libcall::BZERO), Type::getVoidTy(Ctx),
         getExternalSymbol(BzeroName, TLI->getPointerTy(DL)), std::move(Args));
   } else {
     TargetLowering::ArgListTy Args;
     Args.push_back(CreateEntry(Dst, PointerType::getUnqual(Ctx)));
     Args.push_back(CreateEntry(Src, Src.getValueType().getTypeForEVT(Ctx)));
     Args.push_back(CreateEntry(Size, DL.getIntPtrType(Ctx)));
-    CLI.setLibCallee(TLI->getLibcallCallingConv(RTLIB::MEMSET),
+    CLI.setLibCallee(TLI->getLibcallCallingConv(RTLIB::Libcall::MEMSET),
                      Dst.getValueType().getTypeForEVT(Ctx),
-                     getExternalSymbol(TLI->getLibcallName(RTLIB::MEMSET),
+                     getExternalSymbol(TLI->getLibcallName(RTLIB::Libcall::MEMSET),
                                        TLI->getPointerTy(DL)),
                      std::move(Args));
   }
   bool LowersToMemset =
-      TLI->getLibcallName(RTLIB::MEMSET) == StringRef("memset");
+      TLI->getLibcallName(RTLIB::Libcall::MEMSET) == StringRef("memset");
   // If we're going to use bzero, make sure not to tail call unless the
   // subsequent return doesn't need a value, as bzero doesn't return the first
   // arg unlike memset.
@@ -9185,7 +9186,7 @@ SDValue SelectionDAG::getAtomicMemset(SDValue Chain, const SDLoc &dl,
 
   RTLIB::Libcall LibraryCall =
       RTLIB::getMEMSET_ELEMENT_UNORDERED_ATOMIC(ElemSz);
-  if (LibraryCall == RTLIB::UNKNOWN_LIBCALL)
+  if (LibraryCall == RTLIB::Libcall::UNKNOWN_LIBCALL)
     report_fatal_error("Unsupported element size");
 
   TargetLowering::CallLoweringInfo CLI(*this);

@@ -2659,7 +2659,7 @@ SDValue DAGTypeLegalizer::PromoteIntOp_ExpOp(SDNode *N) {
   RTLIB::Libcall LC = IsPowI ? RTLIB::getPOWI(N->getValueType(0))
                              : RTLIB::getLDEXP(N->getValueType(0));
 
-  if (LC == RTLIB::UNKNOWN_LIBCALL || !TLI.getLibcallName(LC)) {
+  if (LC == RTLIB::Libcall::UNKNOWN_LIBCALL || !TLI.getLibcallName(LC)) {
     // Scalarize vector FPOWI instead of promoting the type. This allows the
     // scalar FPOWIs to be visited and converted to libcalls before promoting
     // the type.
@@ -3150,7 +3150,7 @@ std::pair <SDValue, SDValue> DAGTypeLegalizer::ExpandAtomic(SDNode *Node) {
     Ops.push_back(Node->getOperand(1));
   } else {
     LC = RTLIB::getSYNC(Opc, VT);
-    assert(LC != RTLIB::UNKNOWN_LIBCALL &&
+    assert(LC != RTLIB::Libcall::UNKNOWN_LIBCALL &&
            "Unexpected atomic op or value type!");
     Ops.append(Node->op_begin() + 1, Node->op_end());
   }
@@ -4056,14 +4056,14 @@ void DAGTypeLegalizer::ExpandIntRes_CTPOP(SDNode *N, SDValue &Lo, SDValue &Hi) {
   SDLoc DL(N);
 
   if (TLI.getOperationAction(ISD::CTPOP, VT) == TargetLoweringBase::LibCall) {
-    RTLIB::Libcall LC = RTLIB::UNKNOWN_LIBCALL;
+    RTLIB::Libcall LC = RTLIB::Libcall::UNKNOWN_LIBCALL;
     if (VT == MVT::i32)
-      LC = RTLIB::CTPOP_I32;
+      LC = RTLIB::Libcall::CTPOP_I32;
     else if (VT == MVT::i64)
-      LC = RTLIB::CTPOP_I64;
+      LC = RTLIB::Libcall::CTPOP_I64;
     else if (VT == MVT::i128)
-      LC = RTLIB::CTPOP_I128;
-    assert(LC != RTLIB::UNKNOWN_LIBCALL && TLI.getLibcallName(LC) &&
+      LC = RTLIB::Libcall::CTPOP_I128;
+    assert(LC != RTLIB::Libcall::UNKNOWN_LIBCALL && TLI.getLibcallName(LC) &&
            "LibCall explicitly requested, but not available");
     TargetLowering::MakeLibCallOptions CallOptions;
     EVT IntVT =
@@ -4154,7 +4154,7 @@ void DAGTypeLegalizer::ExpandIntRes_FP_TO_XINT(SDNode *N, SDValue &Lo,
 
   RTLIB::Libcall LC =
       IsSigned ? RTLIB::getFPTOSINT(OpVT, VT) : RTLIB::getFPTOUINT(OpVT, VT);
-  assert(LC != RTLIB::UNKNOWN_LIBCALL && "Unexpected fp-to-xint conversion!");
+  assert(LC != RTLIB::Libcall::UNKNOWN_LIBCALL && "Unexpected fp-to-xint conversion!");
   TargetLowering::MakeLibCallOptions CallOptions;
   if (getTypeAction(Op.getValueType()) == TargetLowering::TypeSoftenFloat)
     CallOptions.setTypeListBeforeSoften(OpVT, VT);
@@ -4192,59 +4192,59 @@ void DAGTypeLegalizer::ExpandIntRes_XROUND_XRINT(SDNode *N, SDValue &Lo,
     Op = fpExtendHelper(Op, Chain, IsStrict, VT, dl, DAG);
   }
 
-  RTLIB::Libcall LC = RTLIB::UNKNOWN_LIBCALL;
+  RTLIB::Libcall LC = RTLIB::Libcall::UNKNOWN_LIBCALL;
   if (N->getOpcode() == ISD::LROUND ||
       N->getOpcode() == ISD::STRICT_LROUND) {
     if (VT == MVT::f32)
-      LC = RTLIB::LROUND_F32;
+      LC = RTLIB::Libcall::LROUND_F32;
     else if (VT == MVT::f64)
-      LC = RTLIB::LROUND_F64;
+      LC = RTLIB::Libcall::LROUND_F64;
     else if (VT == MVT::f80)
-      LC = RTLIB::LROUND_F80;
+      LC = RTLIB::Libcall::LROUND_F80;
     else if (VT == MVT::f128)
-      LC = RTLIB::LROUND_F128;
+      LC = RTLIB::Libcall::LROUND_F128;
     else if (VT == MVT::ppcf128)
-      LC = RTLIB::LROUND_PPCF128;
-    assert(LC != RTLIB::UNKNOWN_LIBCALL && "Unexpected lround input type!");
+      LC = RTLIB::Libcall::LROUND_PPCF128;
+    assert(LC != RTLIB::Libcall::UNKNOWN_LIBCALL && "Unexpected lround input type!");
   } else if (N->getOpcode() == ISD::LRINT ||
              N->getOpcode() == ISD::STRICT_LRINT) {
     if (VT == MVT::f32)
-      LC = RTLIB::LRINT_F32;
+      LC = RTLIB::Libcall::LRINT_F32;
     else if (VT == MVT::f64)
-      LC = RTLIB::LRINT_F64;
+      LC = RTLIB::Libcall::LRINT_F64;
     else if (VT == MVT::f80)
-      LC = RTLIB::LRINT_F80;
+      LC = RTLIB::Libcall::LRINT_F80;
     else if (VT == MVT::f128)
-      LC = RTLIB::LRINT_F128;
+      LC = RTLIB::Libcall::LRINT_F128;
     else if (VT == MVT::ppcf128)
-      LC = RTLIB::LRINT_PPCF128;
-    assert(LC != RTLIB::UNKNOWN_LIBCALL && "Unexpected lrint input type!");
+      LC = RTLIB::Libcall::LRINT_PPCF128;
+    assert(LC != RTLIB::Libcall::UNKNOWN_LIBCALL && "Unexpected lrint input type!");
   } else if (N->getOpcode() == ISD::LLROUND ||
       N->getOpcode() == ISD::STRICT_LLROUND) {
     if (VT == MVT::f32)
-      LC = RTLIB::LLROUND_F32;
+      LC = RTLIB::Libcall::LLROUND_F32;
     else if (VT == MVT::f64)
-      LC = RTLIB::LLROUND_F64;
+      LC = RTLIB::Libcall::LLROUND_F64;
     else if (VT == MVT::f80)
-      LC = RTLIB::LLROUND_F80;
+      LC = RTLIB::Libcall::LLROUND_F80;
     else if (VT == MVT::f128)
-      LC = RTLIB::LLROUND_F128;
+      LC = RTLIB::Libcall::LLROUND_F128;
     else if (VT == MVT::ppcf128)
-      LC = RTLIB::LLROUND_PPCF128;
-    assert(LC != RTLIB::UNKNOWN_LIBCALL && "Unexpected llround input type!");
+      LC = RTLIB::Libcall::LLROUND_PPCF128;
+    assert(LC != RTLIB::Libcall::UNKNOWN_LIBCALL && "Unexpected llround input type!");
   } else if (N->getOpcode() == ISD::LLRINT ||
              N->getOpcode() == ISD::STRICT_LLRINT) {
     if (VT == MVT::f32)
-      LC = RTLIB::LLRINT_F32;
+      LC = RTLIB::Libcall::LLRINT_F32;
     else if (VT == MVT::f64)
-      LC = RTLIB::LLRINT_F64;
+      LC = RTLIB::Libcall::LLRINT_F64;
     else if (VT == MVT::f80)
-      LC = RTLIB::LLRINT_F80;
+      LC = RTLIB::Libcall::LLRINT_F80;
     else if (VT == MVT::f128)
-      LC = RTLIB::LLRINT_F128;
+      LC = RTLIB::Libcall::LLRINT_F128;
     else if (VT == MVT::ppcf128)
-      LC = RTLIB::LLRINT_PPCF128;
-    assert(LC != RTLIB::UNKNOWN_LIBCALL && "Unexpected llrint input type!");
+      LC = RTLIB::Libcall::LLRINT_PPCF128;
+    assert(LC != RTLIB::Libcall::UNKNOWN_LIBCALL && "Unexpected llrint input type!");
   } else
     llvm_unreachable("Unexpected opcode!");
 
@@ -4405,17 +4405,17 @@ void DAGTypeLegalizer::ExpandIntRes_MUL(SDNode *N,
     return;
 
   // If nothing else, we can make a libcall.
-  RTLIB::Libcall LC = RTLIB::UNKNOWN_LIBCALL;
+  RTLIB::Libcall LC = RTLIB::Libcall::UNKNOWN_LIBCALL;
   if (VT == MVT::i16)
-    LC = RTLIB::MUL_I16;
+    LC = RTLIB::Libcall::MUL_I16;
   else if (VT == MVT::i32)
-    LC = RTLIB::MUL_I32;
+    LC = RTLIB::Libcall::MUL_I32;
   else if (VT == MVT::i64)
-    LC = RTLIB::MUL_I64;
+    LC = RTLIB::Libcall::MUL_I64;
   else if (VT == MVT::i128)
-    LC = RTLIB::MUL_I128;
+    LC = RTLIB::Libcall::MUL_I128;
 
-  if (LC == RTLIB::UNKNOWN_LIBCALL || !TLI.getLibcallName(LC)) {
+  if (LC == RTLIB::Libcall::UNKNOWN_LIBCALL || !TLI.getLibcallName(LC)) {
     // Perform a wide multiplication where the wide type is the original VT and
     // the 4 parts are the split arguments.
     TLI.forceExpandMultiply(DAG, dl, /*Signed=*/false, Lo, Hi, LL, RL, LH, RH);
@@ -4785,16 +4785,16 @@ void DAGTypeLegalizer::ExpandIntRes_SDIV(SDNode *N,
     return;
   }
 
-  RTLIB::Libcall LC = RTLIB::UNKNOWN_LIBCALL;
+  RTLIB::Libcall LC = RTLIB::Libcall::UNKNOWN_LIBCALL;
   if (VT == MVT::i16)
-    LC = RTLIB::SDIV_I16;
+    LC = RTLIB::Libcall::SDIV_I16;
   else if (VT == MVT::i32)
-    LC = RTLIB::SDIV_I32;
+    LC = RTLIB::Libcall::SDIV_I32;
   else if (VT == MVT::i64)
-    LC = RTLIB::SDIV_I64;
+    LC = RTLIB::Libcall::SDIV_I64;
   else if (VT == MVT::i128)
-    LC = RTLIB::SDIV_I128;
-  assert(LC != RTLIB::UNKNOWN_LIBCALL && "Unsupported SDIV!");
+    LC = RTLIB::Libcall::SDIV_I128;
+  assert(LC != RTLIB::Libcall::UNKNOWN_LIBCALL && "Unsupported SDIV!");
 
   TargetLowering::MakeLibCallOptions CallOptions;
   CallOptions.setIsSigned(true);
@@ -4996,42 +4996,42 @@ void DAGTypeLegalizer::ExpandIntRes_Shift(SDNode *N,
   }
 
   // Otherwise, emit a libcall.
-  RTLIB::Libcall LC = RTLIB::UNKNOWN_LIBCALL;
+  RTLIB::Libcall LC = RTLIB::Libcall::UNKNOWN_LIBCALL;
   bool isSigned;
   if (Opc == ISD::SHL) {
     isSigned = false; /*sign irrelevant*/
     if (VT == MVT::i16)
-      LC = RTLIB::SHL_I16;
+      LC = RTLIB::Libcall::SHL_I16;
     else if (VT == MVT::i32)
-      LC = RTLIB::SHL_I32;
+      LC = RTLIB::Libcall::SHL_I32;
     else if (VT == MVT::i64)
-      LC = RTLIB::SHL_I64;
+      LC = RTLIB::Libcall::SHL_I64;
     else if (VT == MVT::i128)
-      LC = RTLIB::SHL_I128;
+      LC = RTLIB::Libcall::SHL_I128;
   } else if (Opc == ISD::SRL) {
     isSigned = false;
     if (VT == MVT::i16)
-      LC = RTLIB::SRL_I16;
+      LC = RTLIB::Libcall::SRL_I16;
     else if (VT == MVT::i32)
-      LC = RTLIB::SRL_I32;
+      LC = RTLIB::Libcall::SRL_I32;
     else if (VT == MVT::i64)
-      LC = RTLIB::SRL_I64;
+      LC = RTLIB::Libcall::SRL_I64;
     else if (VT == MVT::i128)
-      LC = RTLIB::SRL_I128;
+      LC = RTLIB::Libcall::SRL_I128;
   } else {
     assert(Opc == ISD::SRA && "Unknown shift!");
     isSigned = true;
     if (VT == MVT::i16)
-      LC = RTLIB::SRA_I16;
+      LC = RTLIB::Libcall::SRA_I16;
     else if (VT == MVT::i32)
-      LC = RTLIB::SRA_I32;
+      LC = RTLIB::Libcall::SRA_I32;
     else if (VT == MVT::i64)
-      LC = RTLIB::SRA_I64;
+      LC = RTLIB::Libcall::SRA_I64;
     else if (VT == MVT::i128)
-      LC = RTLIB::SRA_I128;
+      LC = RTLIB::Libcall::SRA_I128;
   }
 
-  if (LC != RTLIB::UNKNOWN_LIBCALL && TLI.getLibcallName(LC)) {
+  if (LC != RTLIB::Libcall::UNKNOWN_LIBCALL && TLI.getLibcallName(LC)) {
     EVT ShAmtTy =
         EVT::getIntegerVT(*DAG.getContext(), DAG.getLibInfo().getIntSize());
     SDValue ShAmt = DAG.getZExtOrTrunc(N->getOperand(1), dl, ShAmtTy);
@@ -5115,16 +5115,16 @@ void DAGTypeLegalizer::ExpandIntRes_SREM(SDNode *N,
     return;
   }
 
-  RTLIB::Libcall LC = RTLIB::UNKNOWN_LIBCALL;
+  RTLIB::Libcall LC = RTLIB::Libcall::UNKNOWN_LIBCALL;
   if (VT == MVT::i16)
-    LC = RTLIB::SREM_I16;
+    LC = RTLIB::Libcall::SREM_I16;
   else if (VT == MVT::i32)
-    LC = RTLIB::SREM_I32;
+    LC = RTLIB::Libcall::SREM_I32;
   else if (VT == MVT::i64)
-    LC = RTLIB::SREM_I64;
+    LC = RTLIB::Libcall::SREM_I64;
   else if (VT == MVT::i128)
-    LC = RTLIB::SREM_I128;
-  assert(LC != RTLIB::UNKNOWN_LIBCALL && "Unsupported SREM!");
+    LC = RTLIB::Libcall::SREM_I128;
+  assert(LC != RTLIB::Libcall::UNKNOWN_LIBCALL && "Unsupported SREM!");
 
   TargetLowering::MakeLibCallOptions CallOptions;
   CallOptions.setIsSigned(true);
@@ -5206,17 +5206,17 @@ void DAGTypeLegalizer::ExpandIntRes_XMULO(SDNode *N,
   Type *PtrTy = PtrVT.getTypeForEVT(*DAG.getContext());
 
   // Replace this with a libcall that will check overflow.
-  RTLIB::Libcall LC = RTLIB::UNKNOWN_LIBCALL;
+  RTLIB::Libcall LC = RTLIB::Libcall::UNKNOWN_LIBCALL;
   if (VT == MVT::i32)
-    LC = RTLIB::MULO_I32;
+    LC = RTLIB::Libcall::MULO_I32;
   else if (VT == MVT::i64)
-    LC = RTLIB::MULO_I64;
+    LC = RTLIB::Libcall::MULO_I64;
   else if (VT == MVT::i128)
-    LC = RTLIB::MULO_I128;
+    LC = RTLIB::Libcall::MULO_I128;
 
   // If we don't have the libcall or if the function we are compiling is the
   // implementation of the expected libcall (avoid inf-loop), expand inline.
-  if (LC == RTLIB::UNKNOWN_LIBCALL || !TLI.getLibcallName(LC) ||
+  if (LC == RTLIB::Libcall::UNKNOWN_LIBCALL || !TLI.getLibcallName(LC) ||
       TLI.getLibcallName(LC) == DAG.getMachineFunction().getName()) {
     // FIXME: This is not an optimal expansion, but better than crashing.
     SDValue MulLo, MulHi;
@@ -5305,16 +5305,16 @@ void DAGTypeLegalizer::ExpandIntRes_UDIV(SDNode *N,
     }
   }
 
-  RTLIB::Libcall LC = RTLIB::UNKNOWN_LIBCALL;
+  RTLIB::Libcall LC = RTLIB::Libcall::UNKNOWN_LIBCALL;
   if (VT == MVT::i16)
-    LC = RTLIB::UDIV_I16;
+    LC = RTLIB::Libcall::UDIV_I16;
   else if (VT == MVT::i32)
-    LC = RTLIB::UDIV_I32;
+    LC = RTLIB::Libcall::UDIV_I32;
   else if (VT == MVT::i64)
-    LC = RTLIB::UDIV_I64;
+    LC = RTLIB::Libcall::UDIV_I64;
   else if (VT == MVT::i128)
-    LC = RTLIB::UDIV_I128;
-  assert(LC != RTLIB::UNKNOWN_LIBCALL && "Unsupported UDIV!");
+    LC = RTLIB::Libcall::UDIV_I128;
+  assert(LC != RTLIB::Libcall::UNKNOWN_LIBCALL && "Unsupported UDIV!");
 
   TargetLowering::MakeLibCallOptions CallOptions;
   SplitInteger(TLI.makeLibCall(DAG, LC, VT, Ops, CallOptions, dl).first, Lo, Hi);
@@ -5348,16 +5348,16 @@ void DAGTypeLegalizer::ExpandIntRes_UREM(SDNode *N,
     }
   }
 
-  RTLIB::Libcall LC = RTLIB::UNKNOWN_LIBCALL;
+  RTLIB::Libcall LC = RTLIB::Libcall::UNKNOWN_LIBCALL;
   if (VT == MVT::i16)
-    LC = RTLIB::UREM_I16;
+    LC = RTLIB::Libcall::UREM_I16;
   else if (VT == MVT::i32)
-    LC = RTLIB::UREM_I32;
+    LC = RTLIB::Libcall::UREM_I32;
   else if (VT == MVT::i64)
-    LC = RTLIB::UREM_I64;
+    LC = RTLIB::Libcall::UREM_I64;
   else if (VT == MVT::i128)
-    LC = RTLIB::UREM_I128;
-  assert(LC != RTLIB::UNKNOWN_LIBCALL && "Unsupported UREM!");
+    LC = RTLIB::Libcall::UREM_I128;
+  assert(LC != RTLIB::Libcall::UNKNOWN_LIBCALL && "Unsupported UREM!");
 
   TargetLowering::MakeLibCallOptions CallOptions;
   SplitInteger(TLI.makeLibCall(DAG, LC, VT, Ops, CallOptions, dl).first, Lo, Hi);
@@ -5809,7 +5809,7 @@ SDValue DAGTypeLegalizer::ExpandIntOp_XINT_TO_FP(SDNode *N) {
   EVT DstVT = N->getValueType(0);
   RTLIB::Libcall LC = IsSigned ? RTLIB::getSINTTOFP(Op.getValueType(), DstVT)
                                : RTLIB::getUINTTOFP(Op.getValueType(), DstVT);
-  assert(LC != RTLIB::UNKNOWN_LIBCALL &&
+  assert(LC != RTLIB::Libcall::UNKNOWN_LIBCALL &&
          "Don't know how to expand this XINT_TO_FP!");
   TargetLowering::MakeLibCallOptions CallOptions;
   CallOptions.setIsSigned(true);

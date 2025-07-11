@@ -171,24 +171,24 @@ SDValue AArch64SelectionDAGInfo::EmitStreamingCompatibleMemLibCall(
 
   RTLIB::Libcall NewLC;
   switch (LC) {
-  case RTLIB::MEMCPY: {
-    NewLC = RTLIB::SC_MEMCPY;
+  case RTLIB::Libcall::MEMCPY: {
+    NewLC = RTLIB::Libcall::SC_MEMCPY;
     TargetLowering::ArgListEntry Entry;
     Entry.Ty = PointerType::getUnqual(*DAG.getContext());
     Entry.Node = Src;
     Args.push_back(Entry);
     break;
   }
-  case RTLIB::MEMMOVE: {
-    NewLC = RTLIB::SC_MEMMOVE;
+  case RTLIB::Libcall::MEMMOVE: {
+    NewLC = RTLIB::Libcall::SC_MEMMOVE;
     TargetLowering::ArgListEntry Entry;
     Entry.Ty = PointerType::getUnqual(*DAG.getContext());
     Entry.Node = Src;
     Args.push_back(Entry);
     break;
   }
-  case RTLIB::MEMSET: {
-    NewLC = RTLIB::SC_MEMSET;
+  case RTLIB::Libcall::MEMSET: {
+    NewLC = RTLIB::Libcall::SC_MEMSET;
     TargetLowering::ArgListEntry Entry;
     Entry.Ty = Type::getInt32Ty(*DAG.getContext());
     Src = DAG.getZExtOrTrunc(Src, DL, MVT::i32);
@@ -229,7 +229,7 @@ SDValue AArch64SelectionDAGInfo::EmitTargetCodeForMemcpy(
   SMEAttrs Attrs = AFI->getSMEFnAttrs();
   if (LowerToSMERoutines && !Attrs.hasNonStreamingInterfaceAndBody())
     return EmitStreamingCompatibleMemLibCall(DAG, DL, Chain, Dst, Src, Size,
-                                             RTLIB::MEMCPY);
+                                             RTLIB::Libcall::MEMCPY);
   return SDValue();
 }
 
@@ -249,7 +249,7 @@ SDValue AArch64SelectionDAGInfo::EmitTargetCodeForMemset(
   SMEAttrs Attrs = AFI->getSMEFnAttrs();
   if (LowerToSMERoutines && !Attrs.hasNonStreamingInterfaceAndBody())
     return EmitStreamingCompatibleMemLibCall(DAG, dl, Chain, Dst, Src, Size,
-                                             RTLIB::MEMSET);
+                                             RTLIB::Libcall::MEMSET);
   return SDValue();
 }
 
@@ -268,7 +268,7 @@ SDValue AArch64SelectionDAGInfo::EmitTargetCodeForMemmove(
   SMEAttrs Attrs = AFI->getSMEFnAttrs();
   if (LowerToSMERoutines && !Attrs.hasNonStreamingInterfaceAndBody())
     return EmitStreamingCompatibleMemLibCall(DAG, dl, Chain, Dst, Src, Size,
-                                             RTLIB::MEMMOVE);
+                                             RTLIB::Libcall::MEMMOVE);
   return SDValue();
 }
 

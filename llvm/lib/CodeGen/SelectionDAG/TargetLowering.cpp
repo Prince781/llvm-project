@@ -182,7 +182,7 @@ TargetLowering::makeLibCall(SelectionDAG &DAG, RTLIB::Libcall LC, EVT RetVT,
   }
 
   const char *LibcallName = getLibcallName(LC);
-  if (LC == RTLIB::UNKNOWN_LIBCALL || !LibcallName)
+  if (LC == RTLIB::Libcall::UNKNOWN_LIBCALL || !LibcallName)
     reportFatalInternalError("unsupported library call operation");
 
   SDValue Callee =
@@ -326,88 +326,88 @@ void TargetLowering::softenSetCCOperands(SelectionDAG &DAG, EVT VT,
          && "Unsupported setcc type!");
 
   // Expand into one or more soft-fp libcall(s).
-  RTLIB::Libcall LC1 = RTLIB::UNKNOWN_LIBCALL, LC2 = RTLIB::UNKNOWN_LIBCALL;
+  RTLIB::Libcall LC1 = RTLIB::Libcall::UNKNOWN_LIBCALL, LC2 = RTLIB::Libcall::UNKNOWN_LIBCALL;
   bool ShouldInvertCC = false;
   switch (CCCode) {
   case ISD::SETEQ:
   case ISD::SETOEQ:
-    LC1 = (VT == MVT::f32) ? RTLIB::OEQ_F32 :
-          (VT == MVT::f64) ? RTLIB::OEQ_F64 :
-          (VT == MVT::f128) ? RTLIB::OEQ_F128 : RTLIB::OEQ_PPCF128;
+    LC1 = (VT == MVT::f32) ? RTLIB::Libcall::OEQ_F32 :
+          (VT == MVT::f64) ? RTLIB::Libcall::OEQ_F64 :
+          (VT == MVT::f128) ? RTLIB::Libcall::OEQ_F128 : RTLIB::Libcall::OEQ_PPCF128;
     break;
   case ISD::SETNE:
   case ISD::SETUNE:
-    LC1 = (VT == MVT::f32) ? RTLIB::UNE_F32 :
-          (VT == MVT::f64) ? RTLIB::UNE_F64 :
-          (VT == MVT::f128) ? RTLIB::UNE_F128 : RTLIB::UNE_PPCF128;
+    LC1 = (VT == MVT::f32) ? RTLIB::Libcall::UNE_F32 :
+          (VT == MVT::f64) ? RTLIB::Libcall::UNE_F64 :
+          (VT == MVT::f128) ? RTLIB::Libcall::UNE_F128 : RTLIB::Libcall::UNE_PPCF128;
     break;
   case ISD::SETGE:
   case ISD::SETOGE:
-    LC1 = (VT == MVT::f32) ? RTLIB::OGE_F32 :
-          (VT == MVT::f64) ? RTLIB::OGE_F64 :
-          (VT == MVT::f128) ? RTLIB::OGE_F128 : RTLIB::OGE_PPCF128;
+    LC1 = (VT == MVT::f32) ? RTLIB::Libcall::OGE_F32 :
+          (VT == MVT::f64) ? RTLIB::Libcall::OGE_F64 :
+          (VT == MVT::f128) ? RTLIB::Libcall::OGE_F128 : RTLIB::Libcall::OGE_PPCF128;
     break;
   case ISD::SETLT:
   case ISD::SETOLT:
-    LC1 = (VT == MVT::f32) ? RTLIB::OLT_F32 :
-          (VT == MVT::f64) ? RTLIB::OLT_F64 :
-          (VT == MVT::f128) ? RTLIB::OLT_F128 : RTLIB::OLT_PPCF128;
+    LC1 = (VT == MVT::f32) ? RTLIB::Libcall::OLT_F32 :
+          (VT == MVT::f64) ? RTLIB::Libcall::OLT_F64 :
+          (VT == MVT::f128) ? RTLIB::Libcall::OLT_F128 : RTLIB::Libcall::OLT_PPCF128;
     break;
   case ISD::SETLE:
   case ISD::SETOLE:
-    LC1 = (VT == MVT::f32) ? RTLIB::OLE_F32 :
-          (VT == MVT::f64) ? RTLIB::OLE_F64 :
-          (VT == MVT::f128) ? RTLIB::OLE_F128 : RTLIB::OLE_PPCF128;
+    LC1 = (VT == MVT::f32) ? RTLIB::Libcall::OLE_F32 :
+          (VT == MVT::f64) ? RTLIB::Libcall::OLE_F64 :
+          (VT == MVT::f128) ? RTLIB::Libcall::OLE_F128 : RTLIB::Libcall::OLE_PPCF128;
     break;
   case ISD::SETGT:
   case ISD::SETOGT:
-    LC1 = (VT == MVT::f32) ? RTLIB::OGT_F32 :
-          (VT == MVT::f64) ? RTLIB::OGT_F64 :
-          (VT == MVT::f128) ? RTLIB::OGT_F128 : RTLIB::OGT_PPCF128;
+    LC1 = (VT == MVT::f32) ? RTLIB::Libcall::OGT_F32 :
+          (VT == MVT::f64) ? RTLIB::Libcall::OGT_F64 :
+          (VT == MVT::f128) ? RTLIB::Libcall::OGT_F128 : RTLIB::Libcall::OGT_PPCF128;
     break;
   case ISD::SETO:
     ShouldInvertCC = true;
     [[fallthrough]];
   case ISD::SETUO:
-    LC1 = (VT == MVT::f32) ? RTLIB::UO_F32 :
-          (VT == MVT::f64) ? RTLIB::UO_F64 :
-          (VT == MVT::f128) ? RTLIB::UO_F128 : RTLIB::UO_PPCF128;
+    LC1 = (VT == MVT::f32) ? RTLIB::Libcall::UO_F32 :
+          (VT == MVT::f64) ? RTLIB::Libcall::UO_F64 :
+          (VT == MVT::f128) ? RTLIB::Libcall::UO_F128 : RTLIB::Libcall::UO_PPCF128;
     break;
   case ISD::SETONE:
     // SETONE = O && UNE
     ShouldInvertCC = true;
     [[fallthrough]];
   case ISD::SETUEQ:
-    LC1 = (VT == MVT::f32) ? RTLIB::UO_F32 :
-          (VT == MVT::f64) ? RTLIB::UO_F64 :
-          (VT == MVT::f128) ? RTLIB::UO_F128 : RTLIB::UO_PPCF128;
-    LC2 = (VT == MVT::f32) ? RTLIB::OEQ_F32 :
-          (VT == MVT::f64) ? RTLIB::OEQ_F64 :
-          (VT == MVT::f128) ? RTLIB::OEQ_F128 : RTLIB::OEQ_PPCF128;
+    LC1 = (VT == MVT::f32) ? RTLIB::Libcall::UO_F32 :
+          (VT == MVT::f64) ? RTLIB::Libcall::UO_F64 :
+          (VT == MVT::f128) ? RTLIB::Libcall::UO_F128 : RTLIB::Libcall::UO_PPCF128;
+    LC2 = (VT == MVT::f32) ? RTLIB::Libcall::OEQ_F32 :
+          (VT == MVT::f64) ? RTLIB::Libcall::OEQ_F64 :
+          (VT == MVT::f128) ? RTLIB::Libcall::OEQ_F128 : RTLIB::Libcall::OEQ_PPCF128;
     break;
   default:
     // Invert CC for unordered comparisons
     ShouldInvertCC = true;
     switch (CCCode) {
     case ISD::SETULT:
-      LC1 = (VT == MVT::f32) ? RTLIB::OGE_F32 :
-            (VT == MVT::f64) ? RTLIB::OGE_F64 :
-            (VT == MVT::f128) ? RTLIB::OGE_F128 : RTLIB::OGE_PPCF128;
+      LC1 = (VT == MVT::f32) ? RTLIB::Libcall::OGE_F32 :
+            (VT == MVT::f64) ? RTLIB::Libcall::OGE_F64 :
+            (VT == MVT::f128) ? RTLIB::Libcall::OGE_F128 : RTLIB::Libcall::OGE_PPCF128;
       break;
     case ISD::SETULE:
-      LC1 = (VT == MVT::f32) ? RTLIB::OGT_F32 :
-            (VT == MVT::f64) ? RTLIB::OGT_F64 :
-            (VT == MVT::f128) ? RTLIB::OGT_F128 : RTLIB::OGT_PPCF128;
+      LC1 = (VT == MVT::f32) ? RTLIB::Libcall::OGT_F32 :
+            (VT == MVT::f64) ? RTLIB::Libcall::OGT_F64 :
+            (VT == MVT::f128) ? RTLIB::Libcall::OGT_F128 : RTLIB::Libcall::OGT_PPCF128;
       break;
     case ISD::SETUGT:
-      LC1 = (VT == MVT::f32) ? RTLIB::OLE_F32 :
-            (VT == MVT::f64) ? RTLIB::OLE_F64 :
-            (VT == MVT::f128) ? RTLIB::OLE_F128 : RTLIB::OLE_PPCF128;
+      LC1 = (VT == MVT::f32) ? RTLIB::Libcall::OLE_F32 :
+            (VT == MVT::f64) ? RTLIB::Libcall::OLE_F64 :
+            (VT == MVT::f128) ? RTLIB::Libcall::OLE_F128 : RTLIB::Libcall::OLE_PPCF128;
       break;
     case ISD::SETUGE:
-      LC1 = (VT == MVT::f32) ? RTLIB::OLT_F32 :
-            (VT == MVT::f64) ? RTLIB::OLT_F64 :
-            (VT == MVT::f128) ? RTLIB::OLT_F128 : RTLIB::OLT_PPCF128;
+      LC1 = (VT == MVT::f32) ? RTLIB::Libcall::OLT_F32 :
+            (VT == MVT::f64) ? RTLIB::Libcall::OLT_F64 :
+            (VT == MVT::f128) ? RTLIB::Libcall::OLT_F128 : RTLIB::Libcall::OLT_PPCF128;
       break;
     default: llvm_unreachable("Do not know how to soften this setcc!");
     }
@@ -425,7 +425,7 @@ void TargetLowering::softenSetCCOperands(SelectionDAG &DAG, EVT VT,
   NewRHS = DAG.getConstant(0, dl, RetVT);
 
   RTLIB::LibcallImpl LC1Impl = getLibcallImpl(LC1);
-  if (LC1Impl == RTLIB::Unsupported) {
+  if (LC1Impl == RTLIB::LibcallImpl::Unsupported) {
     reportFatalUsageError(
         "no libcall available to soften floating-point compare");
   }
@@ -436,12 +436,12 @@ void TargetLowering::softenSetCCOperands(SelectionDAG &DAG, EVT VT,
     CCCode = getSetCCInverse(CCCode, RetVT);
   }
 
-  if (LC2 == RTLIB::UNKNOWN_LIBCALL) {
+  if (LC2 == RTLIB::Libcall::UNKNOWN_LIBCALL) {
     // Update Chain.
     Chain = Call.second;
   } else {
     RTLIB::LibcallImpl LC2Impl = getLibcallImpl(LC2);
-    if (LC2Impl == RTLIB::Unsupported) {
+    if (LC2Impl == RTLIB::LibcallImpl::Unsupported) {
       reportFatalUsageError(
           "no libcall available to soften floating-point compare");
     }
@@ -11070,17 +11070,17 @@ void TargetLowering::forceExpandWideMUL(SelectionDAG &DAG, const SDLoc &dl,
   EVT WideVT = EVT::getIntegerVT(*DAG.getContext(), VT.getSizeInBits() * 2);
   // We can fall back to a libcall with an illegal type for the MUL if we
   // have a libcall big enough.
-  RTLIB::Libcall LC = RTLIB::UNKNOWN_LIBCALL;
+  RTLIB::Libcall LC = RTLIB::Libcall::UNKNOWN_LIBCALL;
   if (WideVT == MVT::i16)
-    LC = RTLIB::MUL_I16;
+    LC = RTLIB::Libcall::MUL_I16;
   else if (WideVT == MVT::i32)
-    LC = RTLIB::MUL_I32;
+    LC = RTLIB::Libcall::MUL_I32;
   else if (WideVT == MVT::i64)
-    LC = RTLIB::MUL_I64;
+    LC = RTLIB::Libcall::MUL_I64;
   else if (WideVT == MVT::i128)
-    LC = RTLIB::MUL_I128;
+    LC = RTLIB::Libcall::MUL_I128;
 
-  if (LC == RTLIB::UNKNOWN_LIBCALL || !getLibcallName(LC)) {
+  if (LC == RTLIB::Libcall::UNKNOWN_LIBCALL || !getLibcallName(LC)) {
     forceExpandMultiply(DAG, dl, Signed, Lo, Hi, LHS, RHS);
     return;
   }

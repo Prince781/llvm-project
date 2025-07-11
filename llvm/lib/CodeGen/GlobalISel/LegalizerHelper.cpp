@@ -384,11 +384,11 @@ static RTLIB::Libcall getRTLibDesc(unsigned Opcode, unsigned Size) {
   do {                                                                         \
     switch (Size) {                                                            \
     case 32:                                                                   \
-      return RTLIB::LibcallPrefix##32;                                         \
+      return RTLIB::Libcall::LibcallPrefix##32;                                \
     case 64:                                                                   \
-      return RTLIB::LibcallPrefix##64;                                         \
+      return RTLIB::Libcall::LibcallPrefix##64;                                \
     case 128:                                                                  \
-      return RTLIB::LibcallPrefix##128;                                        \
+      return RTLIB::Libcall::LibcallPrefix##128;                               \
     default:                                                                   \
       llvm_unreachable("unexpected size");                                     \
     }                                                                          \
@@ -398,13 +398,13 @@ static RTLIB::Libcall getRTLibDesc(unsigned Opcode, unsigned Size) {
   do {                                                                         \
     switch (Size) {                                                            \
     case 32:                                                                   \
-      return RTLIB::LibcallPrefix##32;                                         \
+      return RTLIB::Libcall::LibcallPrefix##32;                                \
     case 64:                                                                   \
-      return RTLIB::LibcallPrefix##64;                                         \
+      return RTLIB::Libcall::LibcallPrefix##64;                                \
     case 80:                                                                   \
-      return RTLIB::LibcallPrefix##80;                                         \
+      return RTLIB::Libcall::LibcallPrefix##80;                                \
     case 128:                                                                  \
-      return RTLIB::LibcallPrefix##128;                                        \
+      return RTLIB::Libcall::LibcallPrefix##128;                               \
     default:                                                                   \
       llvm_unreachable("unexpected size");                                     \
     }                                                                          \
@@ -725,21 +725,21 @@ llvm::createMemLibcall(MachineIRBuilder &MIRBuilder, MachineRegisterInfo &MRI,
   const char *Name;
   switch (Opc) {
   case TargetOpcode::G_BZERO:
-    RTLibcall = RTLIB::BZERO;
+    RTLibcall = RTLIB::Libcall::BZERO;
     Name = TLI.getLibcallName(RTLibcall);
     break;
   case TargetOpcode::G_MEMCPY:
-    RTLibcall = RTLIB::MEMCPY;
+    RTLibcall = RTLIB::Libcall::MEMCPY;
     Name = TLI.getMemcpyName();
     Args[0].Flags[0].setReturned();
     break;
   case TargetOpcode::G_MEMMOVE:
-    RTLibcall = RTLIB::MEMMOVE;
+    RTLibcall = RTLIB::Libcall::MEMMOVE;
     Name = TLI.getLibcallName(RTLibcall);
     Args[0].Flags[0].setReturned();
     break;
   case TargetOpcode::G_MEMSET:
-    RTLibcall = RTLIB::MEMSET;
+    RTLibcall = RTLIB::Libcall::MEMSET;
     Name = TLI.getLibcallName(RTLibcall);
     Args[0].Flags[0].setReturned();
     break;
@@ -799,7 +799,7 @@ static RTLIB::Libcall getOutlineAtomicLibcall(MachineInstr &MI) {
   LLT MemType = MMO.getMemoryType();
   uint64_t MemSize = MemType.getSizeInBytes();
   if (MemType.isVector())
-    return RTLIB::UNKNOWN_LIBCALL;
+    return RTLIB::Libcall::UNKNOWN_LIBCALL;
 
 #define LCALLS(A, B) {A##B##_RELAX, A##B##_ACQ, A##B##_REL, A##B##_ACQ_REL}
 #define LCALL5(A)                                                              \
@@ -807,32 +807,32 @@ static RTLIB::Libcall getOutlineAtomicLibcall(MachineInstr &MI) {
   switch (Opc) {
   case TargetOpcode::G_ATOMIC_CMPXCHG:
   case TargetOpcode::G_ATOMIC_CMPXCHG_WITH_SUCCESS: {
-    const RTLIB::Libcall LC[5][4] = {LCALL5(RTLIB::OUTLINE_ATOMIC_CAS)};
+    const RTLIB::Libcall LC[5][4] = {LCALL5(RTLIB::Libcall::OUTLINE_ATOMIC_CAS)};
     return getOutlineAtomicHelper(LC, Ordering, MemSize);
   }
   case TargetOpcode::G_ATOMICRMW_XCHG: {
-    const RTLIB::Libcall LC[5][4] = {LCALL5(RTLIB::OUTLINE_ATOMIC_SWP)};
+    const RTLIB::Libcall LC[5][4] = {LCALL5(RTLIB::Libcall::OUTLINE_ATOMIC_SWP)};
     return getOutlineAtomicHelper(LC, Ordering, MemSize);
   }
   case TargetOpcode::G_ATOMICRMW_ADD:
   case TargetOpcode::G_ATOMICRMW_SUB: {
-    const RTLIB::Libcall LC[5][4] = {LCALL5(RTLIB::OUTLINE_ATOMIC_LDADD)};
+    const RTLIB::Libcall LC[5][4] = {LCALL5(RTLIB::Libcall::OUTLINE_ATOMIC_LDADD)};
     return getOutlineAtomicHelper(LC, Ordering, MemSize);
   }
   case TargetOpcode::G_ATOMICRMW_AND: {
-    const RTLIB::Libcall LC[5][4] = {LCALL5(RTLIB::OUTLINE_ATOMIC_LDCLR)};
+    const RTLIB::Libcall LC[5][4] = {LCALL5(RTLIB::Libcall::OUTLINE_ATOMIC_LDCLR)};
     return getOutlineAtomicHelper(LC, Ordering, MemSize);
   }
   case TargetOpcode::G_ATOMICRMW_OR: {
-    const RTLIB::Libcall LC[5][4] = {LCALL5(RTLIB::OUTLINE_ATOMIC_LDSET)};
+    const RTLIB::Libcall LC[5][4] = {LCALL5(RTLIB::Libcall::OUTLINE_ATOMIC_LDSET)};
     return getOutlineAtomicHelper(LC, Ordering, MemSize);
   }
   case TargetOpcode::G_ATOMICRMW_XOR: {
-    const RTLIB::Libcall LC[5][4] = {LCALL5(RTLIB::OUTLINE_ATOMIC_LDEOR)};
+    const RTLIB::Libcall LC[5][4] = {LCALL5(RTLIB::Libcall::OUTLINE_ATOMIC_LDEOR)};
     return getOutlineAtomicHelper(LC, Ordering, MemSize);
   }
   default:
-    return RTLIB::UNKNOWN_LIBCALL;
+    return RTLIB::Libcall::UNKNOWN_LIBCALL;
   }
 #undef LCALLS
 #undef LCALL5
@@ -961,18 +961,18 @@ getStateLibraryFunctionFor(MachineInstr &MI, const TargetLowering &TLI) {
   RTLIB::Libcall RTLibcall;
   switch (MI.getOpcode()) {
   case TargetOpcode::G_GET_FPENV:
-    RTLibcall = RTLIB::FEGETENV;
+    RTLibcall = RTLIB::Libcall::FEGETENV;
     break;
   case TargetOpcode::G_SET_FPENV:
   case TargetOpcode::G_RESET_FPENV:
-    RTLibcall = RTLIB::FESETENV;
+    RTLibcall = RTLIB::Libcall::FESETENV;
     break;
   case TargetOpcode::G_GET_FPMODE:
-    RTLibcall = RTLIB::FEGETMODE;
+    RTLibcall = RTLIB::Libcall::FEGETMODE;
     break;
   case TargetOpcode::G_SET_FPMODE:
   case TargetOpcode::G_RESET_FPMODE:
-    RTLibcall = RTLIB::FESETMODE;
+    RTLibcall = RTLIB::Libcall::FESETMODE;
     break;
   default:
     llvm_unreachable("Unexpected opcode");
@@ -1075,11 +1075,11 @@ getFCMPLibcallDesc(const CmpInst::Predicate Pred, unsigned Size) {
   do {                                                                         \
     switch (Size) {                                                            \
     case 32:                                                                   \
-      return {RTLIB::LibcallPrefix##32, ICmpPred};                             \
+      return {RTLIB::Libcall::LibcallPrefix##32, ICmpPred};                    \
     case 64:                                                                   \
-      return {RTLIB::LibcallPrefix##64, ICmpPred};                             \
+      return {RTLIB::Libcall::LibcallPrefix##64, ICmpPred};                    \
     case 128:                                                                  \
-      return {RTLIB::LibcallPrefix##128, ICmpPred};                            \
+      return {RTLIB::Libcall::LibcallPrefix##128, ICmpPred};                   \
     default:                                                                   \
       llvm_unreachable("unexpected size");                                     \
     }                                                                          \
@@ -1101,7 +1101,7 @@ getFCMPLibcallDesc(const CmpInst::Predicate Pred, unsigned Size) {
   case CmpInst::FCMP_UNO:
     RTLIBCASE_CMP(UO_F, CmpInst::ICMP_NE);
   default:
-    return {RTLIB::UNKNOWN_LIBCALL, CmpInst::BAD_ICMP_PREDICATE};
+    return {RTLIB::Libcall::UNKNOWN_LIBCALL, CmpInst::BAD_ICMP_PREDICATE};
   }
 }
 
@@ -1151,7 +1151,7 @@ LegalizerHelper::createFCMPLibcall(MachineIRBuilder &MIRBuilder,
 
   // Simple case if we have a direct mapping from predicate to libcall
   if (const auto [Libcall, ICmpPred] = getFCMPLibcallDesc(Cond, Size);
-      Libcall != RTLIB::UNKNOWN_LIBCALL &&
+      Libcall != RTLIB::Libcall::UNKNOWN_LIBCALL &&
       ICmpPred != CmpInst::BAD_ICMP_PREDICATE) {
     if (BuildLibcall(Libcall, ICmpPred, DstReg)) {
       return Legalized;

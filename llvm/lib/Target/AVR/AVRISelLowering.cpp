@@ -492,13 +492,13 @@ SDValue AVRTargetLowering::LowerDivRem(SDValue Op, SelectionDAG &DAG) const {
   default:
     llvm_unreachable("Unexpected request for libcall!");
   case MVT::i8:
-    LC = IsSigned ? RTLIB::SDIVREM_I8 : RTLIB::UDIVREM_I8;
+    LC = IsSigned ? RTLIB::Libcall::SDIVREM_I8 : RTLIB::Libcall::UDIVREM_I8;
     break;
   case MVT::i16:
-    LC = IsSigned ? RTLIB::SDIVREM_I16 : RTLIB::UDIVREM_I16;
+    LC = IsSigned ? RTLIB::Libcall::SDIVREM_I16 : RTLIB::Libcall::UDIVREM_I16;
     break;
   case MVT::i32:
-    LC = IsSigned ? RTLIB::SDIVREM_I32 : RTLIB::UDIVREM_I32;
+    LC = IsSigned ? RTLIB::Libcall::SDIVREM_I32 : RTLIB::Libcall::UDIVREM_I32;
     break;
   }
 

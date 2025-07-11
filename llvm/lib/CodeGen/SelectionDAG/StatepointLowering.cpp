@@ -1305,7 +1305,7 @@ void SelectionDAGBuilder::visitGCRelocate(const GCRelocateInst &Relocate) {
 
 void SelectionDAGBuilder::LowerDeoptimizeCall(const CallInst *CI) {
   const auto &TLI = DAG.getTargetLoweringInfo();
-  SDValue Callee = DAG.getExternalSymbol(TLI.getLibcallName(RTLIB::DEOPTIMIZE),
+  SDValue Callee = DAG.getExternalSymbol(TLI.getLibcallName(RTLIB::Libcall::DEOPTIMIZE),
                                          TLI.getPointerTy(DAG.getDataLayout()));
 
   // We don't lower calls to __llvm_deoptimize as varargs, but as a regular

@@ -1828,16 +1828,16 @@ SparcTargetLowering::SparcTargetLowering(const TargetMachine &TM,
     // .umul works for both signed and unsigned
     setOperationAction(ISD::SMUL_LOHI, MVT::i32, Expand);
     setOperationAction(ISD::UMUL_LOHI, MVT::i32, Expand);
-    setLibcallImpl(RTLIB::MUL_I32, RTLIB::sparc_umul);
+    setLibcallImpl(RTLIB::Libcall::MUL_I32, RTLIB::LibcallImpl::sparc_umul);
 
     setOperationAction(ISD::SDIV, MVT::i32, Expand);
-    setLibcallImpl(RTLIB::SDIV_I32, RTLIB::sparc_div);
+    setLibcallImpl(RTLIB::Libcall::SDIV_I32, RTLIB::LibcallImpl::sparc_div);
 
     setOperationAction(ISD::UDIV, MVT::i32, Expand);
-    setLibcallImpl(RTLIB::UDIV_I32, RTLIB::sparc_udiv);
+    setLibcallImpl(RTLIB::Libcall::UDIV_I32, RTLIB::LibcallImpl::sparc_udiv);
 
-    setLibcallImpl(RTLIB::SREM_I32, RTLIB::sparc_rem);
-    setLibcallImpl(RTLIB::UREM_I32, RTLIB::sparc_urem);
+    setLibcallImpl(RTLIB::Libcall::SREM_I32, RTLIB::LibcallImpl::sparc_rem);
+    setLibcallImpl(RTLIB::Libcall::UREM_I32, RTLIB::LibcallImpl::sparc_urem);
   }
 
   if (Subtarget->is64Bit()) {
@@ -1898,10 +1898,10 @@ SparcTargetLowering::SparcTargetLowering(const TargetMachine &TM,
     }
 
     if (!Subtarget->is64Bit()) {
-      setLibcallImpl(RTLIB::FPTOSINT_F128_I64, RTLIB::_Q_qtoll);
-      setLibcallImpl(RTLIB::FPTOUINT_F128_I64, RTLIB::_Q_qtoull);
-      setLibcallImpl(RTLIB::SINTTOFP_I64_F128, RTLIB::_Q_lltoq);
-      setLibcallImpl(RTLIB::UINTTOFP_I64_F128, RTLIB::_Q_ulltoq);
+      setLibcallImpl(RTLIB::Libcall::FPTOSINT_F128_I64, RTLIB::LibcallImpl::_Q_qtoll);
+      setLibcallImpl(RTLIB::Libcall::FPTOUINT_F128_I64, RTLIB::LibcallImpl::_Q_qtoull);
+      setLibcallImpl(RTLIB::Libcall::SINTTOFP_I64_F128, RTLIB::LibcallImpl::_Q_lltoq);
+      setLibcallImpl(RTLIB::Libcall::UINTTOFP_I64_F128, RTLIB::LibcallImpl::_Q_ulltoq);
     }
 
   } else {
@@ -1921,41 +1921,41 @@ SparcTargetLowering::SparcTargetLowering(const TargetMachine &TM,
 
     // Setup Runtime library names.
     if (Subtarget->is64Bit() && !Subtarget->useSoftFloat()) {
-      setLibcallImpl(RTLIB::ADD_F128, RTLIB::_Qp_add);
-      setLibcallImpl(RTLIB::SUB_F128, RTLIB::_Qp_sub);
-      setLibcallImpl(RTLIB::MUL_F128, RTLIB::_Qp_mul);
-      setLibcallImpl(RTLIB::DIV_F128, RTLIB::_Qp_div);
-      setLibcallImpl(RTLIB::SQRT_F128, RTLIB::_Qp_sqrt);
-      setLibcallImpl(RTLIB::FPTOSINT_F128_I32, RTLIB::_Qp_qtoi);
-      setLibcallImpl(RTLIB::FPTOUINT_F128_I32, RTLIB::_Qp_qtoui);
-      setLibcallImpl(RTLIB::SINTTOFP_I32_F128, RTLIB::_Qp_itoq);
-      setLibcallImpl(RTLIB::UINTTOFP_I32_F128, RTLIB::_Qp_uitoq);
-      setLibcallImpl(RTLIB::FPTOSINT_F128_I64, RTLIB::_Qp_qtox);
-      setLibcallImpl(RTLIB::FPTOUINT_F128_I64, RTLIB::_Qp_qtoux);
-      setLibcallImpl(RTLIB::SINTTOFP_I64_F128, RTLIB::_Qp_xtoq);
-      setLibcallImpl(RTLIB::UINTTOFP_I64_F128, RTLIB::_Qp_uxtoq);
-      setLibcallImpl(RTLIB::FPEXT_F32_F128, RTLIB::_Qp_stoq);
-      setLibcallImpl(RTLIB::FPEXT_F64_F128, RTLIB::_Qp_dtoq);
-      setLibcallImpl(RTLIB::FPROUND_F128_F32, RTLIB::_Qp_qtos);
-      setLibcallImpl(RTLIB::FPROUND_F128_F64, RTLIB::_Qp_qtod);
+      setLibcallImpl(RTLIB::Libcall::ADD_F128, RTLIB::LibcallImpl::_Qp_add);
+      setLibcallImpl(RTLIB::Libcall::SUB_F128, RTLIB::LibcallImpl::_Qp_sub);
+      setLibcallImpl(RTLIB::Libcall::MUL_F128, RTLIB::LibcallImpl::_Qp_mul);
+      setLibcallImpl(RTLIB::Libcall::DIV_F128, RTLIB::LibcallImpl::_Qp_div);
+      setLibcallImpl(RTLIB::Libcall::SQRT_F128, RTLIB::LibcallImpl::_Qp_sqrt);
+      setLibcallImpl(RTLIB::Libcall::FPTOSINT_F128_I32, RTLIB::LibcallImpl::_Qp_qtoi);
+      setLibcallImpl(RTLIB::Libcall::FPTOUINT_F128_I32, RTLIB::LibcallImpl::_Qp_qtoui);
+      setLibcallImpl(RTLIB::Libcall::SINTTOFP_I32_F128, RTLIB::LibcallImpl::_Qp_itoq);
+      setLibcallImpl(RTLIB::Libcall::UINTTOFP_I32_F128, RTLIB::LibcallImpl::_Qp_uitoq);
+      setLibcallImpl(RTLIB::Libcall::FPTOSINT_F128_I64, RTLIB::LibcallImpl::_Qp_qtox);
+      setLibcallImpl(RTLIB::Libcall::FPTOUINT_F128_I64, RTLIB::LibcallImpl::_Qp_qtoux);
+      setLibcallImpl(RTLIB::Libcall::SINTTOFP_I64_F128, RTLIB::LibcallImpl::_Qp_xtoq);
+      setLibcallImpl(RTLIB::Libcall::UINTTOFP_I64_F128, RTLIB::LibcallImpl::_Qp_uxtoq);
+      setLibcallImpl(RTLIB::Libcall::FPEXT_F32_F128, RTLIB::LibcallImpl::_Qp_stoq);
+      setLibcallImpl(RTLIB::Libcall::FPEXT_F64_F128, RTLIB::LibcallImpl::_Qp_dtoq);
+      setLibcallImpl(RTLIB::Libcall::FPROUND_F128_F32, RTLIB::LibcallImpl::_Qp_qtos);
+      setLibcallImpl(RTLIB::Libcall::FPROUND_F128_F64, RTLIB::LibcallImpl::_Qp_qtod);
     } else if (!Subtarget->useSoftFloat()) {
-      setLibcallImpl(RTLIB::ADD_F128, RTLIB::_Q_add);
-      setLibcallImpl(RTLIB::SUB_F128, RTLIB::_Q_sub);
-      setLibcallImpl(RTLIB::MUL_F128, RTLIB::_Q_mul);
-      setLibcallImpl(RTLIB::DIV_F128, RTLIB::_Q_div);
-      setLibcallImpl(RTLIB::SQRT_F128, RTLIB::_Q_sqrt);
-      setLibcallImpl(RTLIB::FPTOSINT_F128_I32, RTLIB::_Q_qtoi);
-      setLibcallImpl(RTLIB::FPTOUINT_F128_I32, RTLIB::_Q_qtou);
-      setLibcallImpl(RTLIB::SINTTOFP_I32_F128, RTLIB::_Q_itoq);
-      setLibcallImpl(RTLIB::UINTTOFP_I32_F128, RTLIB::_Q_utoq);
-      setLibcallImpl(RTLIB::FPTOSINT_F128_I64, RTLIB::_Q_qtoll);
-      setLibcallImpl(RTLIB::FPTOUINT_F128_I64, RTLIB::_Q_qtoull);
-      setLibcallImpl(RTLIB::SINTTOFP_I64_F128, RTLIB::_Q_lltoq);
-      setLibcallImpl(RTLIB::UINTTOFP_I64_F128, RTLIB::_Q_ulltoq);
-      setLibcallImpl(RTLIB::FPEXT_F32_F128, RTLIB::_Q_stoq);
-      setLibcallImpl(RTLIB::FPEXT_F64_F128, RTLIB::_Q_dtoq);
-      setLibcallImpl(RTLIB::FPROUND_F128_F32, RTLIB::_Q_qtos);
-      setLibcallImpl(RTLIB::FPROUND_F128_F64, RTLIB::_Q_qtod);
+      setLibcallImpl(RTLIB::Libcall::ADD_F128, RTLIB::LibcallImpl::_Q_add);
+      setLibcallImpl(RTLIB::Libcall::SUB_F128, RTLIB::LibcallImpl::_Q_sub);
+      setLibcallImpl(RTLIB::Libcall::MUL_F128, RTLIB::LibcallImpl::_Q_mul);
+      setLibcallImpl(RTLIB::Libcall::DIV_F128, RTLIB::LibcallImpl::_Q_div);
+      setLibcallImpl(RTLIB::Libcall::SQRT_F128, RTLIB::LibcallImpl::_Q_sqrt);
+      setLibcallImpl(RTLIB::Libcall::FPTOSINT_F128_I32, RTLIB::LibcallImpl::_Q_qtoi);
+      setLibcallImpl(RTLIB::Libcall::FPTOUINT_F128_I32, RTLIB::LibcallImpl::_Q_qtou);
+      setLibcallImpl(RTLIB::Libcall::SINTTOFP_I32_F128, RTLIB::LibcallImpl::_Q_itoq);
+      setLibcallImpl(RTLIB::Libcall::UINTTOFP_I32_F128, RTLIB::LibcallImpl::_Q_utoq);
+      setLibcallImpl(RTLIB::Libcall::FPTOSINT_F128_I64, RTLIB::LibcallImpl::_Q_qtoll);
+      setLibcallImpl(RTLIB::Libcall::FPTOUINT_F128_I64, RTLIB::LibcallImpl::_Q_qtoull);
+      setLibcallImpl(RTLIB::Libcall::SINTTOFP_I64_F128, RTLIB::LibcallImpl::_Q_lltoq);
+      setLibcallImpl(RTLIB::Libcall::UINTTOFP_I64_F128, RTLIB::LibcallImpl::_Q_ulltoq);
+      setLibcallImpl(RTLIB::Libcall::FPEXT_F32_F128, RTLIB::LibcallImpl::_Q_stoq);
+      setLibcallImpl(RTLIB::Libcall::FPEXT_F64_F128, RTLIB::LibcallImpl::_Q_dtoq);
+      setLibcallImpl(RTLIB::Libcall::FPROUND_F128_F32, RTLIB::LibcallImpl::_Q_qtos);
+      setLibcallImpl(RTLIB::Libcall::FPROUND_F128_F64, RTLIB::LibcallImpl::_Q_qtod);
     }
   }
 
@@ -2474,11 +2474,11 @@ LowerF128_FPEXTEND(SDValue Op, SelectionDAG &DAG,
 
   if (Op.getOperand(0).getValueType() == MVT::f64)
     return TLI.LowerF128Op(Op, DAG,
-                           TLI.getLibcallName(RTLIB::FPEXT_F64_F128), 1);
+                           TLI.getLibcallName(RTLIB::Libcall::FPEXT_F64_F128), 1);
 
   if (Op.getOperand(0).getValueType() == MVT::f32)
     return TLI.LowerF128Op(Op, DAG,
-                           TLI.getLibcallName(RTLIB::FPEXT_F32_F128), 1);
+                           TLI.getLibcallName(RTLIB::Libcall::FPEXT_F32_F128), 1);
 
   llvm_unreachable("fpextend with non-float operand!");
   return SDValue();
@@ -2493,10 +2493,10 @@ LowerF128_FPROUND(SDValue Op, SelectionDAG &DAG,
 
   if (Op.getValueType() == MVT::f64)
     return TLI.LowerF128Op(Op, DAG,
-                           TLI.getLibcallName(RTLIB::FPROUND_F128_F64), 1);
+                           TLI.getLibcallName(RTLIB::Libcall::FPROUND_F128_F64), 1);
   if (Op.getValueType() == MVT::f32)
     return TLI.LowerF128Op(Op, DAG,
-                           TLI.getLibcallName(RTLIB::FPROUND_F128_F32), 1);
+                           TLI.getLibcallName(RTLIB::Libcall::FPROUND_F128_F32), 1);
 
   llvm_unreachable("fpround to non-float!");
   return SDValue();
@@ -2513,8 +2513,8 @@ static SDValue LowerFP_TO_SINT(SDValue Op, SelectionDAG &DAG,
   if (Op.getOperand(0).getValueType() == MVT::f128
       && (!hasHardQuad || !TLI.isTypeLegal(VT))) {
     const char *libName = TLI.getLibcallName(VT == MVT::i32
-                                             ? RTLIB::FPTOSINT_F128_I32
-                                             : RTLIB::FPTOSINT_F128_I64);
+                                             ? RTLIB::Libcall::FPTOSINT_F128_I32
+                                             : RTLIB::Libcall::FPTOSINT_F128_I64);
     return TLI.LowerF128Op(Op, DAG, libName, 1);
   }
 
@@ -2544,8 +2544,8 @@ static SDValue LowerSINT_TO_FP(SDValue Op, SelectionDAG &DAG,
   if (Op.getValueType() == MVT::f128
       && (!hasHardQuad || !TLI.isTypeLegal(OpVT))) {
     const char *libName = TLI.getLibcallName(OpVT == MVT::i32
-                                             ? RTLIB::SINTTOFP_I32_F128
-                                             : RTLIB::SINTTOFP_I64_F128);
+                                             ? RTLIB::Libcall::SINTTOFP_I32_F128
+                                             : RTLIB::Libcall::SINTTOFP_I64_F128);
     return TLI.LowerF128Op(Op, DAG, libName, 1);
   }
 
@@ -2574,8 +2574,8 @@ static SDValue LowerFP_TO_UINT(SDValue Op, SelectionDAG &DAG,
 
   return TLI.LowerF128Op(Op, DAG,
                          TLI.getLibcallName(VT == MVT::i32
-                                            ? RTLIB::FPTOUINT_F128_I32
-                                            : RTLIB::FPTOUINT_F128_I64),
+                                            ? RTLIB::Libcall::FPTOUINT_F128_I32
+                                            : RTLIB::Libcall::FPTOUINT_F128_I64),
                          1);
 }
 
@@ -2592,8 +2592,8 @@ static SDValue LowerUINT_TO_FP(SDValue Op, SelectionDAG &DAG,
 
   return TLI.LowerF128Op(Op, DAG,
                          TLI.getLibcallName(OpVT == MVT::i32
-                                            ? RTLIB::UINTTOFP_I32_F128
-                                            : RTLIB::UINTTOFP_I64_F128),
+                                            ? RTLIB::Libcall::UINTTOFP_I32_F128
+                                            : RTLIB::Libcall::UINTTOFP_I64_F128),
                          1);
 }
 
@@ -3147,15 +3147,15 @@ LowerOperation(SDValue Op, SelectionDAG &DAG) const {
   case ISD::LOAD:               return LowerLOAD(Op, DAG);
   case ISD::STORE:              return LowerSTORE(Op, DAG);
   case ISD::FADD:               return LowerF128Op(Op, DAG,
-                                       getLibcallName(RTLIB::ADD_F128), 2);
+                                       getLibcallName(RTLIB::Libcall::ADD_F128), 2);
   case ISD::FSUB:               return LowerF128Op(Op, DAG,
-                                       getLibcallName(RTLIB::SUB_F128), 2);
+                                       getLibcallName(RTLIB::Libcall::SUB_F128), 2);
   case ISD::FMUL:               return LowerF128Op(Op, DAG,
-                                       getLibcallName(RTLIB::MUL_F128), 2);
+                                       getLibcallName(RTLIB::Libcall::MUL_F128), 2);
   case ISD::FDIV:               return LowerF128Op(Op, DAG,
-                                       getLibcallName(RTLIB::DIV_F128), 2);
+                                       getLibcallName(RTLIB::Libcall::DIV_F128), 2);
   case ISD::FSQRT:              return LowerF128Op(Op, DAG,
-                                       getLibcallName(RTLIB::SQRT_F128),1);
+                                       getLibcallName(RTLIB::Libcall::SQRT_F128),1);
   case ISD::FABS:
   case ISD::FNEG:               return LowerFNEGorFABS(Op, DAG, isV9);
   case ISD::FP_EXTEND:          return LowerF128_FPEXTEND(Op, DAG, *this);
@@ -3466,7 +3466,7 @@ void SparcTargetLowering::ReplaceNodeResults(SDNode *N,
 
   SDLoc dl(N);
 
-  RTLIB::Libcall libCall = RTLIB::UNKNOWN_LIBCALL;
+  RTLIB::Libcall libCall = RTLIB::Libcall::UNKNOWN_LIBCALL;
 
   switch (N->getOpcode()) {
   default:
@@ -3479,8 +3479,8 @@ void SparcTargetLowering::ReplaceNodeResults(SDNode *N,
         || N->getValueType(0) != MVT::i64)
       return;
     libCall = ((N->getOpcode() == ISD::FP_TO_SINT)
-               ? RTLIB::FPTOSINT_F128_I64
-               : RTLIB::FPTOUINT_F128_I64);
+               ? RTLIB::Libcall::FPTOSINT_F128_I64
+               : RTLIB::Libcall::FPTOUINT_F128_I64);
 
     Results.push_back(LowerF128Op(SDValue(N, 0),
                                   DAG,
@@ -3505,8 +3505,8 @@ void SparcTargetLowering::ReplaceNodeResults(SDNode *N,
       return;
 
     libCall = ((N->getOpcode() == ISD::SINT_TO_FP)
-               ? RTLIB::SINTTOFP_I64_F128
-               : RTLIB::UINTTOFP_I64_F128);
+               ? RTLIB::Libcall::SINTTOFP_I64_F128
+               : RTLIB::Libcall::UINTTOFP_I64_F128);
 
     Results.push_back(LowerF128Op(SDValue(N, 0),
                                   DAG,

@@ -221,16 +221,16 @@ bool DwarfEHPrepare::InsertUnwindResumeCalls() {
 
   if ((Pers == EHPersonality::GNU_CXX || Pers == EHPersonality::GNU_CXX_SjLj) &&
       TargetTriple.isTargetEHABICompatible()) {
-    RewindName = TLI.getLibcallName(RTLIB::CXA_END_CLEANUP);
+    RewindName = TLI.getLibcallName(RTLIB::Libcall::CXA_END_CLEANUP);
     FTy = FunctionType::get(Type::getVoidTy(Ctx), false);
     RewindFunctionCallingConv =
-        TLI.getLibcallCallingConv(RTLIB::CXA_END_CLEANUP);
+        TLI.getLibcallCallingConv(RTLIB::Libcall::CXA_END_CLEANUP);
     DoesRewindFunctionNeedExceptionObject = false;
   } else {
-    RewindName = TLI.getLibcallName(RTLIB::UNWIND_RESUME);
+    RewindName = TLI.getLibcallName(RTLIB::Libcall::UNWIND_RESUME);
     FTy = FunctionType::get(Type::getVoidTy(Ctx), PointerType::getUnqual(Ctx),
                             false);
-    RewindFunctionCallingConv = TLI.getLibcallCallingConv(RTLIB::UNWIND_RESUME);
+    RewindFunctionCallingConv = TLI.getLibcallCallingConv(RTLIB::Libcall::UNWIND_RESUME);
     DoesRewindFunctionNeedExceptionObject = true;
   }
   RewindFunction = F.getParent()->getOrInsertFunction(RewindName, FTy);

@@ -2346,7 +2346,7 @@ SDValue LoongArchTargetLowering::lowerFP16_TO_FP(SDValue Op,
                                                   DL, MVT::f32, Op0)
                                     : DAG.getBitcast(MVT::f32, Op0);
   SDValue Res;
-  std::tie(Res, Chain) = makeLibCall(DAG, RTLIB::FPEXT_F16_F32, MVT::f32, Arg,
+  std::tie(Res, Chain) = makeLibCall(DAG, RTLIB::Libcall::FPEXT_F16_F32, MVT::f32, Arg,
                                      CallOptions, DL, Chain);
   return Res;
 }
@@ -4249,7 +4249,7 @@ void LoongArchTargetLowering::ReplaceNodeResults(
     SDValue Op0 = N->getOperand(0);
     EVT OpVT = Op0.getValueType();
     RTLIB::Libcall LC =
-        OpVT == MVT::f64 ? RTLIB::LROUND_F64 : RTLIB::LROUND_F32;
+        OpVT == MVT::f64 ? RTLIB::Libcall::LROUND_F64 : RTLIB::Libcall::LROUND_F32;
     MakeLibCallOptions CallOptions;
     CallOptions.setTypeListBeforeSoften(OpVT, MVT::i64, true);
     SDValue Result = makeLibCall(DAG, LC, MVT::i64, Op0, CallOptions, DL).first;

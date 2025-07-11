@@ -133,9 +133,9 @@ bool WebAssemblyPeephole::runOnMachineFunction(MachineFunction &MF) {
         MachineOperand &Op1 = MI.getOperand(1);
         if (Op1.isSymbol()) {
           StringRef Name(Op1.getSymbolName());
-          if (Name == TLI.getLibcallName(RTLIB::MEMCPY) ||
-              Name == TLI.getLibcallName(RTLIB::MEMMOVE) ||
-              Name == TLI.getLibcallName(RTLIB::MEMSET)) {
+          if (Name == TLI.getLibcallName(RTLIB::Libcall::MEMCPY) ||
+              Name == TLI.getLibcallName(RTLIB::Libcall::MEMMOVE) ||
+              Name == TLI.getLibcallName(RTLIB::Libcall::MEMSET)) {
             LibFunc Func;
             if (LibInfo.getLibFunc(Name, Func)) {
               const auto &Op2 = MI.getOperand(2);

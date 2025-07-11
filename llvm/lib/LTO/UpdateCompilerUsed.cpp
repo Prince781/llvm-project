@@ -78,7 +78,7 @@ private:
       if (Lowering && TLSet.insert(Lowering).second)
         // TargetLowering has info on library calls that CodeGen expects to be
         // available, both from the C runtime and compiler-rt.
-        for (unsigned I = 0, E = static_cast<unsigned>(RTLIB::UNKNOWN_LIBCALL);
+        for (unsigned I = 0, E = static_cast<unsigned>(RTLIB::Libcall::UNKNOWN_LIBCALL);
              I != E; ++I)
           if (const char *Name =
                   Lowering->getLibcallName(static_cast<RTLIB::Libcall>(I)))

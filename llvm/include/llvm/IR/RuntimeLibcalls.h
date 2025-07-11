@@ -32,25 +32,7 @@
 #undef GET_RUNTIME_LIBCALL_ENUM
 
 namespace llvm {
-
-template <> struct enum_iteration_traits<RTLIB::Libcall> {
-  static constexpr bool is_iterable = true;
-};
-
-template <> struct enum_iteration_traits<RTLIB::LibcallImpl> {
-  static constexpr bool is_iterable = true;
-};
-
 namespace RTLIB {
-
-// Return an iterator over all Libcall values.
-static inline auto libcalls() {
-  return enum_seq(static_cast<RTLIB::Libcall>(0), RTLIB::UNKNOWN_LIBCALL);
-}
-
-static inline auto libcall_impls() {
-  return enum_seq(static_cast<RTLIB::LibcallImpl>(1), RTLIB::NumLibcallImpls);
-}
 
 /// A simple container for information about the supported runtime calls.
 struct RuntimeLibcallsInfo {
@@ -70,84 +52,85 @@ struct RuntimeLibcallsInfo {
   }
 
   /// Rename the default libcall routine name for the specified libcall.
-  void setLibcallImpl(RTLIB::Libcall Call, RTLIB::LibcallImpl Impl) {
+  void setLibcallImpl(Libcall Call, LibcallImpl Impl) {
     LibcallImpls[Call] = Impl;
   }
 
   /// Get the libcall routine name for the specified libcall.
   // FIXME: This should be removed. Only LibcallImpl should have a name.
-  const char *getLibcallName(RTLIB::Libcall Call) const {
+  const char *getLibcallName(Libcall Call) const {
     return LibCallImplNames[LibcallImpls[Call]];
   }
 
   /// Get the libcall routine name for the specified libcall implementation.
-  const char *getLibcallImplName(RTLIB::LibcallImpl CallImpl) const {
+  const char *getLibcallImplName(LibcallImpl CallImpl) const {
     return LibCallImplNames[CallImpl];
   }
 
   /// Return the lowering's selection of implementation call for \p Call
-  RTLIB::LibcallImpl getLibcallImpl(RTLIB::Libcall Call) const {
+  LibcallImpl getLibcallImpl(Libcall Call) const {
     return LibcallImpls[Call];
   }
 
   /// Set the CallingConv that should be used for the specified libcall
   /// implementation
-  void setLibcallImplCallingConv(RTLIB::LibcallImpl Call, CallingConv::ID CC) {
+  void setLibcallImplCallingConv(LibcallImpl Call, CallingConv::ID CC) {
     LibcallImplCallingConvs[Call] = CC;
   }
 
   // FIXME: Remove this wrapper in favor of directly using
   // getLibcallImplCallingConv
-  CallingConv::ID getLibcallCallingConv(RTLIB::Libcall Call) const {
+  CallingConv::ID getLibcallCallingConv(Libcall Call) const {
     return LibcallImplCallingConvs[LibcallImpls[Call]];
   }
 
   /// Get the CallingConv that should be used for the specified libcall.
-  CallingConv::ID getLibcallImplCallingConv(RTLIB::LibcallImpl Call) const {
+  CallingConv::ID getLibcallImplCallingConv(LibcallImpl Call) const {
     return LibcallImplCallingConvs[Call];
   }
 
-  ArrayRef<RTLIB::LibcallImpl> getLibcallImpls() const {
+  ArrayRef<LibcallImpl> getLibcallImpls() const {
     // Trim UNKNOWN_LIBCALL from the back
     return ArrayRef(LibcallImpls).drop_back();
   }
 
-  /// Return a function name compatible with RTLIB::MEMCPY, or nullptr if fully
+  /// Return a function name compatible with Libcall::MEMCPY, or nullptr if fully
   /// unsupported.
   const char *getMemcpyName() const {
-    if (const char *Memcpy = getLibcallName(RTLIB::MEMCPY))
+    if (const char *Memcpy = getLibcallName(Libcall::MEMCPY))
       return Memcpy;
 
     // Fallback to memmove if memcpy isn't available.
-    return getLibcallName(RTLIB::MEMMOVE);
+    return getLibcallName(Libcall::MEMMOVE);
   }
 
   /// Return the libcall provided by \p Impl
-  static RTLIB::Libcall getLibcallFromImpl(RTLIB::LibcallImpl Impl) {
+  static Libcall getLibcallFromImpl(LibcallImpl Impl) {
     return ImplToLibcall[Impl];
   }
 
 private:
-  static const RTLIB::LibcallImpl
-      DefaultLibcallImpls[RTLIB::UNKNOWN_LIBCALL + 1];
+  static const LibcallImpl
+      DefaultLibcallImpls[Libcall::UNKNOWN_LIBCALL + 1];
 
   /// Stores the implementation choice for each each libcall.
-  RTLIB::LibcallImpl LibcallImpls[RTLIB::UNKNOWN_LIBCALL + 1] = {
-      RTLIB::Unsupported};
+  LibcallImpl LibcallImpls[Libcall::UNKNOWN_LIBCALL + 1] = {
+      LibcallImpl::Unsupported};
 
   static_assert(static_cast<int>(CallingConv::C) == 0,
                 "default calling conv should be encoded as 0");
 
   /// Stores the CallingConv that should be used for each libcall
   /// implementation.;
-  CallingConv::ID LibcallImplCallingConvs[RTLIB::NumLibcallImpls] = {};
+  CallingConv::ID LibcallImplCallingConvs[LibcallImpl::NumLibcallImpls] = {};
 
   /// Names of concrete implementations of runtime calls. e.g. __ashlsi3 for
   /// SHL_I32
-  LLVM_ABI static const char *const LibCallImplNames[RTLIB::NumLibcallImpls];
+  LLVM_ABI static const char *const
+      LibCallImplNames[LibcallImpl::NumLibcallImpls];
 
-  /// Map from a concrete LibcallImpl implementation to its RTLIB::Libcall kind.
-  static const RTLIB::Libcall ImplToLibcall[RTLIB::NumLibcallImpls];
+  /// Map from a concrete LibcallImpl implementation to its Libcall kind.
+  static const Libcall ImplToLibcall[LibcallImpl::NumLibcallImpls];
 
   static bool darwinHasSinCosStret(const Triple &TT) {
     if (!TT.isOSDarwin())

@@ -6804,7 +6804,7 @@ SDValue SystemZTargetLowering::lowerFP_EXTEND(SDValue Op,
 SDValue SystemZTargetLowering::useLibCall(SelectionDAG &DAG, RTLIB::Libcall LC,
                                           MVT VT, SDValue Arg, SDLoc DL,
                                           SDValue Chain, bool IsStrict) const {
-  assert(LC != RTLIB::UNKNOWN_LIBCALL && "Unexpected request for libcall!");
+  assert(LC != RTLIB::Libcall::UNKNOWN_LIBCALL && "Unexpected request for libcall!");
   MakeLibCallOptions CallOptions;
   SDValue Result;
   std::tie(Result, Chain) =

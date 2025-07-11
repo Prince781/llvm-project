@@ -26,7 +26,7 @@ def dup1 : RuntimeLibcallImpl<ANOTHER_DUP>;
 
 // CHECK: if (isTargetArchA()) {
 // CHECK-NEXT: static const LibcallImplPair LibraryCalls[] = {
-// CHECK-NEXT:   {RTLIB::SOME_FUNC, RTLIB::func_b}, // func_b
+// CHECK-NEXT:   {RTLIB::Libcall::SOME_FUNC, RTLIB::LibcallImpl::func_b}, // func_b
 // CHECK-NEXT: };
 
 // ERR: :[[@LINE+1]]:5: warning: conflicting implementations for libcall SOME_FUNC: func_b, func_a
@@ -36,8 +36,8 @@ def TheSystemLibraryA : SystemRuntimeLibrary<isTargetArchA,
 
 // CHECK: if (isTargetArchB()) {
 // CHECK-NEXT: static const LibcallImplPair LibraryCalls[] = {
-// CHECK-NEXT:   {RTLIB::OTHER_FUNC, RTLIB::other_func}, // other_func
-// CHECK-NEXT:  {RTLIB::SOME_FUNC, RTLIB::func_a}, // func_a
+// CHECK-NEXT:   {RTLIB::Libcall::OTHER_FUNC, RTLIB::LibcallImpl::other_func}, // other_func
+// CHECK-NEXT:  {RTLIB::Libcall::SOME_FUNC, RTLIB::LibcallImpl::func_a}, // func_a
 // CHECK-NEXT: };
 
 // ERR: :[[@LINE+1]]:5: warning: conflicting implementations for libcall SOME_FUNC: func_a, func_b
@@ -47,9 +47,9 @@ def TheSystemLibraryB : SystemRuntimeLibrary<isTargetArchB,
 
 // CHECK: if (isTargetArchC()) {
 // CHECK-NEXT: static const LibcallImplPair LibraryCalls[] = {
-// CHECK-NEXT:   {RTLIB::ANOTHER_DUP, RTLIB::dup1}, // dup1
-// CHECK-NEXT:   {RTLIB::OTHER_FUNC, RTLIB::other_func}, // other_func
-// CHECK-NEXT:   {RTLIB::SOME_FUNC, RTLIB::func_a}, // func_a
+// CHECK-NEXT:   {RTLIB::Libcall::ANOTHER_DUP, RTLIB::LibcallImpl::dup1}, // dup1
+// CHECK-NEXT:   {RTLIB::Libcall::OTHER_FUNC, RTLIB::LibcallImpl::other_func}, // other_func
+// CHECK-NEXT:   {RTLIB::Libcall::SOME_FUNC, RTLIB::LibcallImpl::func_a}, // func_a
 // CHECK-NEXT: };
 
 // ERR: :[[@LINE+3]]:5: warning: conflicting implementations for libcall ANOTHER_DUP: dup1, dup0

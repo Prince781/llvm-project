@@ -219,7 +219,7 @@ static DenseSet<StringRef> buildPreservedSymbolsSet(const Triple &TT) {
   // FIXME: Do we need to pass in ABI fields from TargetOptions?
   RTLIB::RuntimeLibcallsInfo Libcalls(TT);
   for (RTLIB::LibcallImpl Impl : Libcalls.getLibcallImpls()) {
-    if (Impl != RTLIB::Unsupported)
+    if (Impl != RTLIB::LibcallImpl::Unsupported)
       PreservedSymbolSet.insert(Libcalls.getLibcallImplName(Impl));
   }
   return PreservedSymbolSet;

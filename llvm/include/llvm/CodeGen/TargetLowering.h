@@ -3786,7 +3786,7 @@ private:
 
   /// The ISD::CondCode that should be used to test the result of each of the
   /// comparison libcall against zero.
-  ISD::CondCode CmpLibcallCCs[RTLIB::UNKNOWN_LIBCALL];
+  ISD::CondCode CmpLibcallCCs[RTLIB::Libcall::UNKNOWN_LIBCALL];
 
   /// The bits of IndexedModeActions used to store the legalisation actions
   /// We store the data as   | ML | MS |  L |  S | each taking 4 bits.

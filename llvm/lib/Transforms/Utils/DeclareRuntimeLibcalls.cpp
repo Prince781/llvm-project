@@ -22,7 +22,7 @@ PreservedAnalyses DeclareRuntimeLibcallsPass::run(Module &M,
   LLVMContext &Ctx = M.getContext();
 
   for (RTLIB::LibcallImpl Impl : RTLCI.getLibcallImpls()) {
-    if (Impl == RTLIB::Unsupported)
+    if (Impl == RTLIB::LibcallImpl::Unsupported)
       continue;
 
     // TODO: Declare with correct type, calling convention, and attributes.

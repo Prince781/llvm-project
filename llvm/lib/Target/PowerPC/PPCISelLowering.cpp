@@ -11413,8 +11413,8 @@ SDValue PPCTargetLowering::LowerINTRINSIC_WO_CHAIN(SDValue Op,
   case Intrinsic::ppc_convert_f128_to_ppcf128:
   case Intrinsic::ppc_convert_ppcf128_to_f128: {
     RTLIB::Libcall LC = IntrinsicID == Intrinsic::ppc_convert_ppcf128_to_f128
-                            ? RTLIB::CONVERT_PPCF128_F128
-                            : RTLIB::CONVERT_F128_PPCF128;
+                            ? RTLIB::Libcall::CONVERT_PPCF128_F128
+                            : RTLIB::Libcall::CONVERT_F128_PPCF128;
     MakeLibCallOptions CallOptions;
     std::pair<SDValue, SDValue> Result =
         makeLibCall(DAG, LC, Op.getValueType(), Op.getOperand(1), CallOptions,

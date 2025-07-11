@@ -60,13 +60,13 @@ SDValue ARMSelectionDAGInfo::EmitSpecializedLibcall(
     AEABI_MEMCLR
   } AEABILibcall;
   switch (LC) {
-  case RTLIB::MEMCPY:
+  case RTLIB::Libcall::MEMCPY:
     AEABILibcall = AEABI_MEMCPY;
     break;
-  case RTLIB::MEMMOVE:
+  case RTLIB::Libcall::MEMMOVE:
     AEABILibcall = AEABI_MEMMOVE;
     break;
-  case RTLIB::MEMSET:
+  case RTLIB::Libcall::MEMSET:
     AEABILibcall = AEABI_MEMSET;
     if (isNullConstant(Src))
       AEABILibcall = AEABI_MEMCLR;
@@ -122,10 +122,10 @@ SDValue ARMSelectionDAGInfo::EmitSpecializedLibcall(
   }
 
   static const RTLIB::Libcall FunctionImpls[4][3] = {
-      {RTLIB::MEMCPY, RTLIB::AEABI_MEMCPY4, RTLIB::AEABI_MEMCPY8},
-      {RTLIB::MEMMOVE, RTLIB::AEABI_MEMMOVE4, RTLIB::AEABI_MEMMOVE8},
-      {RTLIB::MEMSET, RTLIB::AEABI_MEMSET4, RTLIB::AEABI_MEMSET8},
-      {RTLIB::AEABI_MEMCLR, RTLIB::AEABI_MEMCLR4, RTLIB::AEABI_MEMCLR8}};
+      {RTLIB::Libcall::MEMCPY, RTLIB::Libcall::AEABI_MEMCPY4, RTLIB::Libcall::AEABI_MEMCPY8},
+      {RTLIB::Libcall::MEMMOVE, RTLIB::Libcall::AEABI_MEMMOVE4, RTLIB::Libcall::AEABI_MEMMOVE8},
+      {RTLIB::Libcall::MEMSET, RTLIB::Libcall::AEABI_MEMSET4, RTLIB::Libcall::AEABI_MEMSET8},
+      {RTLIB::Libcall::AEABI_MEMCLR, RTLIB::Libcall::AEABI_MEMCLR4, RTLIB::Libcall::AEABI_MEMCLR8}};
 
   RTLIB::Libcall NewLC = FunctionImpls[AEABILibcall][AlignVariant];
 
@@ -191,11 +191,11 @@ SDValue ARMSelectionDAGInfo::EmitTargetCodeForMemcpy(
   // within a subtarget-specific limit.
   if (!ConstantSize)
     return EmitSpecializedLibcall(DAG, dl, Chain, Dst, Src, Size,
-                                  Alignment.value(), RTLIB::MEMCPY);
+                                  Alignment.value(), RTLIB::Libcall::MEMCPY);
   uint64_t SizeVal = ConstantSize->getZExtValue();
   if (!AlwaysInline && SizeVal > Subtarget.getMaxInlineSizeThreshold())
     return EmitSpecializedLibcall(DAG, dl, Chain, Dst, Src, Size,
-                                  Alignment.value(), RTLIB::MEMCPY);
+                                  Alignment.value(), RTLIB::Libcall::MEMCPY);
 
   unsigned BytesLeft = SizeVal & 3;
   unsigned NumMemOps = SizeVal >> 2;
@@ -293,7 +293,7 @@ SDValue ARMSelectionDAGInfo::EmitTargetCodeForMemmove(
     SDValue Size, Align Alignment, bool isVolatile,
     MachinePointerInfo DstPtrInfo, MachinePointerInfo SrcPtrInfo) const {
   return EmitSpecializedLibcall(DAG, dl, Chain, Dst, Src, Size,
-                                Alignment.value(), RTLIB::MEMMOVE);
+                                Alignment.value(), RTLIB::Libcall::MEMMOVE);
 }
 
 SDValue ARMSelectionDAGInfo::EmitTargetCodeForMemset(
@@ -318,7 +318,7 @@ SDValue ARMSelectionDAGInfo::EmitTargetCodeForMemset(
 
   if (!AlwaysInline)
     return EmitSpecializedLibcall(DAG, dl, Chain, Dst, Src, Size,
-                                  Alignment.value(), RTLIB::MEMSET);
+                                  Alignment.value(), RTLIB::Libcall::MEMSET);
 
   return SDValue();
 }

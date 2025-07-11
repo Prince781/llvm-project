@@ -4909,11 +4909,11 @@ static bool isDivRemLibcallAvailable(SDNode *Node, bool isSigned,
     return false;
   switch (NodeType.getSimpleVT().SimpleTy) {
   default: return false; // No libcall for vector types.
-  case MVT::i8:   LC= isSigned ? RTLIB::SDIVREM_I8  : RTLIB::UDIVREM_I8;  break;
-  case MVT::i16:  LC= isSigned ? RTLIB::SDIVREM_I16 : RTLIB::UDIVREM_I16; break;
-  case MVT::i32:  LC= isSigned ? RTLIB::SDIVREM_I32 : RTLIB::UDIVREM_I32; break;
-  case MVT::i64:  LC= isSigned ? RTLIB::SDIVREM_I64 : RTLIB::UDIVREM_I64; break;
-  case MVT::i128: LC= isSigned ? RTLIB::SDIVREM_I128:RTLIB::UDIVREM_I128; break;
+  case MVT::i8:   LC= isSigned ? RTLIB::Libcall::SDIVREM_I8  : RTLIB::Libcall::UDIVREM_I8;  break;
+  case MVT::i16:  LC= isSigned ? RTLIB::Libcall::SDIVREM_I16 : RTLIB::Libcall::UDIVREM_I16; break;
+  case MVT::i32:  LC= isSigned ? RTLIB::Libcall::SDIVREM_I32 : RTLIB::Libcall::UDIVREM_I32; break;
+  case MVT::i64:  LC= isSigned ? RTLIB::Libcall::SDIVREM_I64 : RTLIB::Libcall::UDIVREM_I64; break;
+  case MVT::i128: LC= isSigned ? RTLIB::Libcall::SDIVREM_I128: RTLIB::Libcall::UDIVREM_I128; break;
   }
 
   return TLI.getLibcallName(LC) != nullptr;

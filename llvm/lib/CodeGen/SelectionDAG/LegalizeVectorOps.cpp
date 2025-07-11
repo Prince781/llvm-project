@@ -38,7 +38,6 @@
 #include "llvm/CodeGenTypes/MachineValueType.h"
 #include "llvm/IR/DataLayout.h"
 #include "llvm/Support/Casting.h"
-#include "llvm/Support/Compiler.h"
 #include "llvm/Support/Debug.h"
 #include "llvm/Support/ErrorHandling.h"
 #include <cassert>
@@ -1257,9 +1256,9 @@ void VectorLegalizer::Expand(SDNode *Node, SmallVectorImpl<SDValue> &Results) {
     }
     break;
   case ISD::FREM:
-    if (tryExpandVecMathCall(Node, RTLIB::REM_F32, RTLIB::REM_F64,
-                             RTLIB::REM_F80, RTLIB::REM_F128,
-                             RTLIB::REM_PPCF128, Results))
+    if (tryExpandVecMathCall(Node, RTLIB::Libcall::REM_F32, RTLIB::Libcall::REM_F64,
+                             RTLIB::Libcall::REM_F80, RTLIB::Libcall::REM_F128,
+                             RTLIB::Libcall::REM_PPCF128, Results))
       return;
 
     break;
@@ -2269,7 +2268,7 @@ bool VectorLegalizer::tryExpandVecMathCall(
       Node->getValueType(0).getVectorElementType(), Call_F32, Call_F64,
       Call_F80, Call_F128, Call_PPCF128);
 
-  if (LC == RTLIB::UNKNOWN_LIBCALL)
+  if (LC == RTLIB::Libcall::UNKNOWN_LIBCALL)
     return false;
 
   return tryExpandVecMathCall(Node, LC, Results);

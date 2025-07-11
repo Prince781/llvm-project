@@ -2573,8 +2573,8 @@ X86TargetLowering::X86TargetLowering(const X86TargetMachine &TM,
   }
 
   // Combine sin / cos into _sincos_stret if it is available.
-  if (getLibcallName(RTLIB::SINCOS_STRET_F32) != nullptr &&
-      getLibcallName(RTLIB::SINCOS_STRET_F64) != nullptr) {
+  if (getLibcallName(RTLIB::Libcall::SINCOS_STRET_F32) != nullptr &&
+      getLibcallName(RTLIB::Libcall::SINCOS_STRET_F64) != nullptr) {
     setOperationAction(ISD::FSINCOS, MVT::f64, Custom);
     setOperationAction(ISD::FSINCOS, MVT::f32, Custom);
   }
@@ -22198,7 +22198,7 @@ SDValue X86TargetLowering::LowerFP_EXTEND(SDValue Op, SelectionDAG &DAG) const {
       Args.push_back(Entry);
 
       SDValue Callee = DAG.getExternalSymbol(
-          getLibcallName(RTLIB::FPEXT_F16_F32),
+          getLibcallName(RTLIB::Libcall::FPEXT_F16_F32),
           getPointerTy(DAG.getDataLayout()));
       CLI.setDebugLoc(DL).setChain(Chain).setLibCallee(
           CallingConv::C, EVT(VT).getTypeForEVT(*DAG.getContext()), Callee,
@@ -22297,8 +22297,8 @@ SDValue X86TargetLowering::LowerFP_ROUND(SDValue Op, SelectionDAG &DAG) const {
     Args.push_back(Entry);
 
     SDValue Callee = DAG.getExternalSymbol(
-        getLibcallName(SVT == MVT::f64 ? RTLIB::FPROUND_F64_F16
-                                       : RTLIB::FPROUND_F32_F16),
+        getLibcallName(SVT == MVT::f64 ? RTLIB::Libcall::FPROUND_F64_F16
+                                       : RTLIB::Libcall::FPROUND_F32_F16),
         getPointerTy(DAG.getDataLayout()));
     CLI.setDebugLoc(DL).setChain(Chain).setLibCallee(
         CallingConv::C, EVT(MVT::i16).getTypeForEVT(*DAG.getContext()), Callee,
@@ -30000,10 +30000,10 @@ SDValue X86TargetLowering::LowerWin64_i128OP(SDValue Op, SelectionDAG &DAG) cons
   switch (Op->getOpcode()) {
   // clang-format off
   default: llvm_unreachable("Unexpected request for libcall!");
-  case ISD::SDIV:      isSigned = true;  LC = RTLIB::SDIV_I128;    break;
-  case ISD::UDIV:      isSigned = false; LC = RTLIB::UDIV_I128;    break;
-  case ISD::SREM:      isSigned = true;  LC = RTLIB::SREM_I128;    break;
-  case ISD::UREM:      isSigned = false; LC = RTLIB::UREM_I128;    break;
+  case ISD::SDIV:      isSigned = true;  LC = RTLIB::Libcall::SDIV_I128;    break;
+  case ISD::UDIV:      isSigned = false; LC = RTLIB::Libcall::UDIV_I128;    break;
+  case ISD::SREM:      isSigned = true;  LC = RTLIB::Libcall::SREM_I128;    break;
+  case ISD::UREM:      isSigned = false; LC = RTLIB::Libcall::UREM_I128;    break;
   // clang-format on
   }
 
@@ -30066,7 +30066,7 @@ SDValue X86TargetLowering::LowerWin64_FP_TO_INT128(SDValue Op,
     LC = RTLIB::getFPTOSINT(ArgVT, VT);
   else
     LC = RTLIB::getFPTOUINT(ArgVT, VT);
-  assert(LC != RTLIB::UNKNOWN_LIBCALL && "Unexpected request for libcall!");
+  assert(LC != RTLIB::Libcall::UNKNOWN_LIBCALL && "Unexpected request for libcall!");
 
   SDLoc dl(Op);
   MakeLibCallOptions CallOptions;
@@ -30099,7 +30099,7 @@ SDValue X86TargetLowering::LowerWin64_INT128_TO_FP(SDValue Op,
     LC = RTLIB::getSINTTOFP(ArgVT, VT);
   else
     LC = RTLIB::getUINTTOFP(ArgVT, VT);
-  assert(LC != RTLIB::UNKNOWN_LIBCALL && "Unexpected request for libcall!");
+  assert(LC != RTLIB::Libcall::UNKNOWN_LIBCALL && "Unexpected request for libcall!");
 
   SDLoc dl(Op);
   MakeLibCallOptions CallOptions;
@@ -33061,7 +33061,7 @@ static SDValue LowerFSINCOS(SDValue Op, const X86Subtarget &Subtarget,
   // the small struct {f32, f32} is returned in (eax, edx). For f64,
   // the results are returned via SRet in memory.
   const TargetLowering &TLI = DAG.getTargetLoweringInfo();
-  RTLIB::Libcall LC = isF64 ? RTLIB::SINCOS_STRET_F64 : RTLIB::SINCOS_STRET_F32;
+  RTLIB::Libcall LC = isF64 ? RTLIB::Libcall::SINCOS_STRET_F64 : RTLIB::Libcall::SINCOS_STRET_F32;
   const char *LibcallName = TLI.getLibcallName(LC);
   SDValue Callee =
       DAG.getExternalSymbol(LibcallName, TLI.getPointerTy(DAG.getDataLayout()));

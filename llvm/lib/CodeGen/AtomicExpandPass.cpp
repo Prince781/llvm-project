@@ -1747,8 +1747,9 @@ static bool canUseSizedAtomicCall(unsigned Size, Align Alignment,
 
 void AtomicExpandImpl::expandAtomicLoadToLibcall(LoadInst *I) {
   static const RTLIB::Libcall Libcalls[6] = {
-      RTLIB::ATOMIC_LOAD,   RTLIB::ATOMIC_LOAD_1, RTLIB::ATOMIC_LOAD_2,
-      RTLIB::ATOMIC_LOAD_4, RTLIB::ATOMIC_LOAD_8, RTLIB::ATOMIC_LOAD_16};
+      RTLIB::Libcall::ATOMIC_LOAD,   RTLIB::Libcall::ATOMIC_LOAD_1,
+      RTLIB::Libcall::ATOMIC_LOAD_2, RTLIB::Libcall::ATOMIC_LOAD_4,
+      RTLIB::Libcall::ATOMIC_LOAD_8, RTLIB::Libcall::ATOMIC_LOAD_16};
   unsigned Size = getAtomicOpSize(I);
 
   bool expanded = expandAtomicOpToLibcall(
@@ -1760,8 +1761,9 @@ void AtomicExpandImpl::expandAtomicLoadToLibcall(LoadInst *I) {
 
 void AtomicExpandImpl::expandAtomicStoreToLibcall(StoreInst *I) {
   static const RTLIB::Libcall Libcalls[6] = {
-      RTLIB::ATOMIC_STORE,   RTLIB::ATOMIC_STORE_1, RTLIB::ATOMIC_STORE_2,
-      RTLIB::ATOMIC_STORE_4, RTLIB::ATOMIC_STORE_8, RTLIB::ATOMIC_STORE_16};
+      RTLIB::Libcall::ATOMIC_STORE,   RTLIB::Libcall::ATOMIC_STORE_1,
+      RTLIB::Libcall::ATOMIC_STORE_2, RTLIB::Libcall::ATOMIC_STORE_4,
+      RTLIB::Libcall::ATOMIC_STORE_8, RTLIB::Libcall::ATOMIC_STORE_16};
   unsigned Size = getAtomicOpSize(I);
 
   bool expanded = expandAtomicOpToLibcall(
@@ -1773,9 +1775,12 @@ void AtomicExpandImpl::expandAtomicStoreToLibcall(StoreInst *I) {
 
 void AtomicExpandImpl::expandAtomicCASToLibcall(AtomicCmpXchgInst *I) {
   static const RTLIB::Libcall Libcalls[6] = {
-      RTLIB::ATOMIC_COMPARE_EXCHANGE,   RTLIB::ATOMIC_COMPARE_EXCHANGE_1,
-      RTLIB::ATOMIC_COMPARE_EXCHANGE_2, RTLIB::ATOMIC_COMPARE_EXCHANGE_4,
-      RTLIB::ATOMIC_COMPARE_EXCHANGE_8, RTLIB::ATOMIC_COMPARE_EXCHANGE_16};
+      RTLIB::Libcall::ATOMIC_COMPARE_EXCHANGE,
+      RTLIB::Libcall::ATOMIC_COMPARE_EXCHANGE_1,
+      RTLIB::Libcall::ATOMIC_COMPARE_EXCHANGE_2,
+      RTLIB::Libcall::ATOMIC_COMPARE_EXCHANGE_4,
+      RTLIB::Libcall::ATOMIC_COMPARE_EXCHANGE_8,
+      RTLIB::Libcall::ATOMIC_COMPARE_EXCHANGE_16};
   unsigned Size = getAtomicOpSize(I);
 
   bool expanded = expandAtomicOpToLibcall(
@@ -1788,33 +1793,33 @@ void AtomicExpandImpl::expandAtomicCASToLibcall(AtomicCmpXchgInst *I) {
 
 static ArrayRef<RTLIB::Libcall> GetRMWLibcall(AtomicRMWInst::BinOp Op) {
   static const RTLIB::Libcall LibcallsXchg[6] = {
-      RTLIB::ATOMIC_EXCHANGE,   RTLIB::ATOMIC_EXCHANGE_1,
-      RTLIB::ATOMIC_EXCHANGE_2, RTLIB::ATOMIC_EXCHANGE_4,
-      RTLIB::ATOMIC_EXCHANGE_8, RTLIB::ATOMIC_EXCHANGE_16};
+      RTLIB::Libcall::ATOMIC_EXCHANGE,   RTLIB::Libcall::ATOMIC_EXCHANGE_1,
+      RTLIB::Libcall::ATOMIC_EXCHANGE_2, RTLIB::Libcall::ATOMIC_EXCHANGE_4,
+      RTLIB::Libcall::ATOMIC_EXCHANGE_8, RTLIB::Libcall::ATOMIC_EXCHANGE_16};
   static const RTLIB::Libcall LibcallsAdd[6] = {
-      RTLIB::UNKNOWN_LIBCALL,    RTLIB::ATOMIC_FETCH_ADD_1,
-      RTLIB::ATOMIC_FETCH_ADD_2, RTLIB::ATOMIC_FETCH_ADD_4,
-      RTLIB::ATOMIC_FETCH_ADD_8, RTLIB::ATOMIC_FETCH_ADD_16};
+      RTLIB::Libcall::UNKNOWN_LIBCALL,    RTLIB::Libcall::ATOMIC_FETCH_ADD_1,
+      RTLIB::Libcall::ATOMIC_FETCH_ADD_2, RTLIB::Libcall::ATOMIC_FETCH_ADD_4,
+      RTLIB::Libcall::ATOMIC_FETCH_ADD_8, RTLIB::Libcall::ATOMIC_FETCH_ADD_16};
   static const RTLIB::Libcall LibcallsSub[6] = {
-      RTLIB::UNKNOWN_LIBCALL,    RTLIB::ATOMIC_FETCH_SUB_1,
-      RTLIB::ATOMIC_FETCH_SUB_2, RTLIB::ATOMIC_FETCH_SUB_4,
-      RTLIB::ATOMIC_FETCH_SUB_8, RTLIB::ATOMIC_FETCH_SUB_16};
+      RTLIB::Libcall::UNKNOWN_LIBCALL,    RTLIB::Libcall::ATOMIC_FETCH_SUB_1,
+      RTLIB::Libcall::ATOMIC_FETCH_SUB_2, RTLIB::Libcall::ATOMIC_FETCH_SUB_4,
+      RTLIB::Libcall::ATOMIC_FETCH_SUB_8, RTLIB::Libcall::ATOMIC_FETCH_SUB_16};
   static const RTLIB::Libcall LibcallsAnd[6] = {
-      RTLIB::UNKNOWN_LIBCALL,    RTLIB::ATOMIC_FETCH_AND_1,
-      RTLIB::ATOMIC_FETCH_AND_2, RTLIB::ATOMIC_FETCH_AND_4,
-      RTLIB::ATOMIC_FETCH_AND_8, RTLIB::ATOMIC_FETCH_AND_16};
+      RTLIB::Libcall::UNKNOWN_LIBCALL,    RTLIB::Libcall::ATOMIC_FETCH_AND_1,
+      RTLIB::Libcall::ATOMIC_FETCH_AND_2, RTLIB::Libcall::ATOMIC_FETCH_AND_4,
+      RTLIB::Libcall::ATOMIC_FETCH_AND_8, RTLIB::Libcall::ATOMIC_FETCH_AND_16};
   static const RTLIB::Libcall LibcallsOr[6] = {
-      RTLIB::UNKNOWN_LIBCALL,   RTLIB::ATOMIC_FETCH_OR_1,
-      RTLIB::ATOMIC_FETCH_OR_2, RTLIB::ATOMIC_FETCH_OR_4,
-      RTLIB::ATOMIC_FETCH_OR_8, RTLIB::ATOMIC_FETCH_OR_16};
+      RTLIB::Libcall::UNKNOWN_LIBCALL,   RTLIB::Libcall::ATOMIC_FETCH_OR_1,
+      RTLIB::Libcall::ATOMIC_FETCH_OR_2, RTLIB::Libcall::ATOMIC_FETCH_OR_4,
+      RTLIB::Libcall::ATOMIC_FETCH_OR_8, RTLIB::Libcall::ATOMIC_FETCH_OR_16};
   static const RTLIB::Libcall LibcallsXor[6] = {
-      RTLIB::UNKNOWN_LIBCALL,    RTLIB::ATOMIC_FETCH_XOR_1,
-      RTLIB::ATOMIC_FETCH_XOR_2, RTLIB::ATOMIC_FETCH_XOR_4,
-      RTLIB::ATOMIC_FETCH_XOR_8, RTLIB::ATOMIC_FETCH_XOR_16};
+      RTLIB::Libcall::UNKNOWN_LIBCALL,    RTLIB::Libcall::ATOMIC_FETCH_XOR_1,
+      RTLIB::Libcall::ATOMIC_FETCH_XOR_2, RTLIB::Libcall::ATOMIC_FETCH_XOR_4,
+      RTLIB::Libcall::ATOMIC_FETCH_XOR_8, RTLIB::Libcall::ATOMIC_FETCH_XOR_16};
   static const RTLIB::Libcall LibcallsNand[6] = {
-      RTLIB::UNKNOWN_LIBCALL,     RTLIB::ATOMIC_FETCH_NAND_1,
-      RTLIB::ATOMIC_FETCH_NAND_2, RTLIB::ATOMIC_FETCH_NAND_4,
-      RTLIB::ATOMIC_FETCH_NAND_8, RTLIB::ATOMIC_FETCH_NAND_16};
+      RTLIB::Libcall::UNKNOWN_LIBCALL,     RTLIB::Libcall::ATOMIC_FETCH_NAND_1,
+      RTLIB::Libcall::ATOMIC_FETCH_NAND_2, RTLIB::Libcall::ATOMIC_FETCH_NAND_4,
+      RTLIB::Libcall::ATOMIC_FETCH_NAND_8, RTLIB::Libcall::ATOMIC_FETCH_NAND_16};
 
   switch (Op) {
   case AtomicRMWInst::BAD_BINOP:
@@ -1946,7 +1951,7 @@ bool AtomicExpandImpl::expandAtomicOpToLibcall(
       RTLibType = Libcalls[5];
       break;
     }
-  } else if (Libcalls[0] != RTLIB::UNKNOWN_LIBCALL) {
+  } else if (Libcalls[0] != RTLIB::Libcall::UNKNOWN_LIBCALL) {
     RTLibType = Libcalls[0];
   } else {
     // Can't use sized function, and there's no generic for this

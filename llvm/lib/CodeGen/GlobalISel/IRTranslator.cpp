@@ -3927,7 +3927,7 @@ bool IRTranslator::emitSPDescriptorFailure(StackProtectorDescriptor &SPD,
                                            MachineBasicBlock *FailureBB) {
   CurBuilder->setInsertPt(*FailureBB, FailureBB->end());
 
-  const RTLIB::Libcall Libcall = RTLIB::STACKPROTECTOR_CHECK_FAIL;
+  const RTLIB::Libcall Libcall = RTLIB::Libcall::STACKPROTECTOR_CHECK_FAIL;
   const char *Name = TLI->getLibcallName(Libcall);
 
   CallLowering::CallLoweringInfo Info;

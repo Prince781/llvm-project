@@ -1746,18 +1746,18 @@ bool ARMFastISel::SelectDiv(const Instruction *I, bool isSigned) {
     return false;
 
   // Otherwise emit a libcall.
-  RTLIB::Libcall LC = RTLIB::UNKNOWN_LIBCALL;
+  RTLIB::Libcall LC = RTLIB::Libcall::UNKNOWN_LIBCALL;
   if (VT == MVT::i8)
-    LC = isSigned ? RTLIB::SDIV_I8 : RTLIB::UDIV_I8;
+    LC = isSigned ? RTLIB::Libcall::SDIV_I8 : RTLIB::Libcall::UDIV_I8;
   else if (VT == MVT::i16)
-    LC = isSigned ? RTLIB::SDIV_I16 : RTLIB::UDIV_I16;
+    LC = isSigned ? RTLIB::Libcall::SDIV_I16 : RTLIB::Libcall::UDIV_I16;
   else if (VT == MVT::i32)
-    LC = isSigned ? RTLIB::SDIV_I32 : RTLIB::UDIV_I32;
+    LC = isSigned ? RTLIB::Libcall::SDIV_I32 : RTLIB::Libcall::UDIV_I32;
   else if (VT == MVT::i64)
-    LC = isSigned ? RTLIB::SDIV_I64 : RTLIB::UDIV_I64;
+    LC = isSigned ? RTLIB::Libcall::SDIV_I64 : RTLIB::Libcall::UDIV_I64;
   else if (VT == MVT::i128)
-    LC = isSigned ? RTLIB::SDIV_I128 : RTLIB::UDIV_I128;
-  assert(LC != RTLIB::UNKNOWN_LIBCALL && "Unsupported SDIV!");
+    LC = isSigned ? RTLIB::Libcall::SDIV_I128 : RTLIB::Libcall::UDIV_I128;
+  assert(LC != RTLIB::Libcall::UNKNOWN_LIBCALL && "Unsupported SDIV!");
 
   return ARMEmitLibcall(I, LC);
 }
@@ -1775,18 +1775,18 @@ bool ARMFastISel::SelectRem(const Instruction *I, bool isSigned) {
     return false;
   }
 
-  RTLIB::Libcall LC = RTLIB::UNKNOWN_LIBCALL;
+  RTLIB::Libcall LC = RTLIB::Libcall::UNKNOWN_LIBCALL;
   if (VT == MVT::i8)
-    LC = isSigned ? RTLIB::SREM_I8 : RTLIB::UREM_I8;
+    LC = isSigned ? RTLIB::Libcall::SREM_I8 : RTLIB::Libcall::UREM_I8;
   else if (VT == MVT::i16)
-    LC = isSigned ? RTLIB::SREM_I16 : RTLIB::UREM_I16;
+    LC = isSigned ? RTLIB::Libcall::SREM_I16 : RTLIB::Libcall::UREM_I16;
   else if (VT == MVT::i32)
-    LC = isSigned ? RTLIB::SREM_I32 : RTLIB::UREM_I32;
+    LC = isSigned ? RTLIB::Libcall::SREM_I32 : RTLIB::Libcall::UREM_I32;
   else if (VT == MVT::i64)
-    LC = isSigned ? RTLIB::SREM_I64 : RTLIB::UREM_I64;
+    LC = isSigned ? RTLIB::Libcall::SREM_I64 : RTLIB::Libcall::UREM_I64;
   else if (VT == MVT::i128)
-    LC = isSigned ? RTLIB::SREM_I128 : RTLIB::UREM_I128;
-  assert(LC != RTLIB::UNKNOWN_LIBCALL && "Unsupported SREM!");
+    LC = isSigned ? RTLIB::Libcall::SREM_I128 : RTLIB::Libcall::UREM_I128;
+  assert(LC != RTLIB::Libcall::UNKNOWN_LIBCALL && "Unsupported SREM!");
 
   return ARMEmitLibcall(I, LC);
 }

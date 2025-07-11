@@ -235,95 +235,95 @@ void ARMLegalizerInfo::setFCmpLibcallsAEABI() {
   // default-initialized.
   FCmp32Libcalls.resize(CmpInst::LAST_FCMP_PREDICATE + 1);
   FCmp32Libcalls[CmpInst::FCMP_OEQ] = {
-      {RTLIB::OEQ_F32, CmpInst::BAD_ICMP_PREDICATE}};
+      {RTLIB::Libcall::OEQ_F32, CmpInst::BAD_ICMP_PREDICATE}};
   FCmp32Libcalls[CmpInst::FCMP_OGE] = {
-      {RTLIB::OGE_F32, CmpInst::BAD_ICMP_PREDICATE}};
+      {RTLIB::Libcall::OGE_F32, CmpInst::BAD_ICMP_PREDICATE}};
   FCmp32Libcalls[CmpInst::FCMP_OGT] = {
-      {RTLIB::OGT_F32, CmpInst::BAD_ICMP_PREDICATE}};
+      {RTLIB::Libcall::OGT_F32, CmpInst::BAD_ICMP_PREDICATE}};
   FCmp32Libcalls[CmpInst::FCMP_OLE] = {
-      {RTLIB::OLE_F32, CmpInst::BAD_ICMP_PREDICATE}};
+      {RTLIB::Libcall::OLE_F32, CmpInst::BAD_ICMP_PREDICATE}};
   FCmp32Libcalls[CmpInst::FCMP_OLT] = {
-      {RTLIB::OLT_F32, CmpInst::BAD_ICMP_PREDICATE}};
-  FCmp32Libcalls[CmpInst::FCMP_ORD] = {{RTLIB::UO_F32, CmpInst::ICMP_EQ}};
-  FCmp32Libcalls[CmpInst::FCMP_UGE] = {{RTLIB::OLT_F32, CmpInst::ICMP_EQ}};
-  FCmp32Libcalls[CmpInst::FCMP_UGT] = {{RTLIB::OLE_F32, CmpInst::ICMP_EQ}};
-  FCmp32Libcalls[CmpInst::FCMP_ULE] = {{RTLIB::OGT_F32, CmpInst::ICMP_EQ}};
-  FCmp32Libcalls[CmpInst::FCMP_ULT] = {{RTLIB::OGE_F32, CmpInst::ICMP_EQ}};
-  FCmp32Libcalls[CmpInst::FCMP_UNE] = {{RTLIB::UNE_F32, CmpInst::ICMP_EQ}};
+      {RTLIB::Libcall::OLT_F32, CmpInst::BAD_ICMP_PREDICATE}};
+  FCmp32Libcalls[CmpInst::FCMP_ORD] = {{RTLIB::Libcall::UO_F32, CmpInst::ICMP_EQ}};
+  FCmp32Libcalls[CmpInst::FCMP_UGE] = {{RTLIB::Libcall::OLT_F32, CmpInst::ICMP_EQ}};
+  FCmp32Libcalls[CmpInst::FCMP_UGT] = {{RTLIB::Libcall::OLE_F32, CmpInst::ICMP_EQ}};
+  FCmp32Libcalls[CmpInst::FCMP_ULE] = {{RTLIB::Libcall::OGT_F32, CmpInst::ICMP_EQ}};
+  FCmp32Libcalls[CmpInst::FCMP_ULT] = {{RTLIB::Libcall::OGE_F32, CmpInst::ICMP_EQ}};
+  FCmp32Libcalls[CmpInst::FCMP_UNE] = {{RTLIB::Libcall::UNE_F32, CmpInst::ICMP_EQ}};
   FCmp32Libcalls[CmpInst::FCMP_UNO] = {
-      {RTLIB::UO_F32, CmpInst::BAD_ICMP_PREDICATE}};
+      {RTLIB::Libcall::UO_F32, CmpInst::BAD_ICMP_PREDICATE}};
   FCmp32Libcalls[CmpInst::FCMP_ONE] = {
-      {RTLIB::OGT_F32, CmpInst::BAD_ICMP_PREDICATE},
-      {RTLIB::OLT_F32, CmpInst::BAD_ICMP_PREDICATE}};
+      {RTLIB::Libcall::OGT_F32, CmpInst::BAD_ICMP_PREDICATE},
+      {RTLIB::Libcall::OLT_F32, CmpInst::BAD_ICMP_PREDICATE}};
   FCmp32Libcalls[CmpInst::FCMP_UEQ] = {
-      {RTLIB::OEQ_F32, CmpInst::BAD_ICMP_PREDICATE},
-      {RTLIB::UO_F32, CmpInst::BAD_ICMP_PREDICATE}};
+      {RTLIB::Libcall::OEQ_F32, CmpInst::BAD_ICMP_PREDICATE},
+      {RTLIB::Libcall::UO_F32, CmpInst::BAD_ICMP_PREDICATE}};
 
   FCmp64Libcalls.resize(CmpInst::LAST_FCMP_PREDICATE + 1);
   FCmp64Libcalls[CmpInst::FCMP_OEQ] = {
-      {RTLIB::OEQ_F64, CmpInst::BAD_ICMP_PREDICATE}};
+      {RTLIB::Libcall::OEQ_F64, CmpInst::BAD_ICMP_PREDICATE}};
   FCmp64Libcalls[CmpInst::FCMP_OGE] = {
-      {RTLIB::OGE_F64, CmpInst::BAD_ICMP_PREDICATE}};
+      {RTLIB::Libcall::OGE_F64, CmpInst::BAD_ICMP_PREDICATE}};
   FCmp64Libcalls[CmpInst::FCMP_OGT] = {
-      {RTLIB::OGT_F64, CmpInst::BAD_ICMP_PREDICATE}};
+      {RTLIB::Libcall::OGT_F64, CmpInst::BAD_ICMP_PREDICATE}};
   FCmp64Libcalls[CmpInst::FCMP_OLE] = {
-      {RTLIB::OLE_F64, CmpInst::BAD_ICMP_PREDICATE}};
+      {RTLIB::Libcall::OLE_F64, CmpInst::BAD_ICMP_PREDICATE}};
   FCmp64Libcalls[CmpInst::FCMP_OLT] = {
-      {RTLIB::OLT_F64, CmpInst::BAD_ICMP_PREDICATE}};
-  FCmp64Libcalls[CmpInst::FCMP_ORD] = {{RTLIB::UO_F64, CmpInst::ICMP_EQ}};
-  FCmp64Libcalls[CmpInst::FCMP_UGE] = {{RTLIB::OLT_F64, CmpInst::ICMP_EQ}};
-  FCmp64Libcalls[CmpInst::FCMP_UGT] = {{RTLIB::OLE_F64, CmpInst::ICMP_EQ}};
-  FCmp64Libcalls[CmpInst::FCMP_ULE] = {{RTLIB::OGT_F64, CmpInst::ICMP_EQ}};
-  FCmp64Libcalls[CmpInst::FCMP_ULT] = {{RTLIB::OGE_F64, CmpInst::ICMP_EQ}};
-  FCmp64Libcalls[CmpInst::FCMP_UNE] = {{RTLIB::UNE_F64, CmpInst::ICMP_EQ}};
+      {RTLIB::Libcall::OLT_F64, CmpInst::BAD_ICMP_PREDICATE}};
+  FCmp64Libcalls[CmpInst::FCMP_ORD] = {{RTLIB::Libcall::UO_F64, CmpInst::ICMP_EQ}};
+  FCmp64Libcalls[CmpInst::FCMP_UGE] = {{RTLIB::Libcall::OLT_F64, CmpInst::ICMP_EQ}};
+  FCmp64Libcalls[CmpInst::FCMP_UGT] = {{RTLIB::Libcall::OLE_F64, CmpInst::ICMP_EQ}};
+  FCmp64Libcalls[CmpInst::FCMP_ULE] = {{RTLIB::Libcall::OGT_F64, CmpInst::ICMP_EQ}};
+  FCmp64Libcalls[CmpInst::FCMP_ULT] = {{RTLIB::Libcall::OGE_F64, CmpInst::ICMP_EQ}};
+  FCmp64Libcalls[CmpInst::FCMP_UNE] = {{RTLIB::Libcall::UNE_F64, CmpInst::ICMP_EQ}};
   FCmp64Libcalls[CmpInst::FCMP_UNO] = {
-      {RTLIB::UO_F64, CmpInst::BAD_ICMP_PREDICATE}};
+      {RTLIB::Libcall::UO_F64, CmpInst::BAD_ICMP_PREDICATE}};
   FCmp64Libcalls[CmpInst::FCMP_ONE] = {
-      {RTLIB::OGT_F64, CmpInst::BAD_ICMP_PREDICATE},
-      {RTLIB::OLT_F64, CmpInst::BAD_ICMP_PREDICATE}};
+      {RTLIB::Libcall::OGT_F64, CmpInst::BAD_ICMP_PREDICATE},
+      {RTLIB::Libcall::OLT_F64, CmpInst::BAD_ICMP_PREDICATE}};
   FCmp64Libcalls[CmpInst::FCMP_UEQ] = {
-      {RTLIB::OEQ_F64, CmpInst::BAD_ICMP_PREDICATE},
-      {RTLIB::UO_F64, CmpInst::BAD_ICMP_PREDICATE}};
+      {RTLIB::Libcall::OEQ_F64, CmpInst::BAD_ICMP_PREDICATE},
+      {RTLIB::Libcall::UO_F64, CmpInst::BAD_ICMP_PREDICATE}};
 }
 
 void ARMLegalizerInfo::setFCmpLibcallsGNU() {
   // FCMP_TRUE and FCMP_FALSE don't need libcalls, they should be
   // default-initialized.
   FCmp32Libcalls.resize(CmpInst::LAST_FCMP_PREDICATE + 1);
-  FCmp32Libcalls[CmpInst::FCMP_OEQ] = {{RTLIB::OEQ_F32, CmpInst::ICMP_EQ}};
-  FCmp32Libcalls[CmpInst::FCMP_OGE] = {{RTLIB::OGE_F32, CmpInst::ICMP_SGE}};
-  FCmp32Libcalls[CmpInst::FCMP_OGT] = {{RTLIB::OGT_F32, CmpInst::ICMP_SGT}};
-  FCmp32Libcalls[CmpInst::FCMP_OLE] = {{RTLIB::OLE_F32, CmpInst::ICMP_SLE}};
-  FCmp32Libcalls[CmpInst::FCMP_OLT] = {{RTLIB::OLT_F32, CmpInst::ICMP_SLT}};
-  FCmp32Libcalls[CmpInst::FCMP_ORD] = {{RTLIB::UO_F32, CmpInst::ICMP_EQ}};
-  FCmp32Libcalls[CmpInst::FCMP_UGE] = {{RTLIB::OLT_F32, CmpInst::ICMP_SGE}};
-  FCmp32Libcalls[CmpInst::FCMP_UGT] = {{RTLIB::OLE_F32, CmpInst::ICMP_SGT}};
-  FCmp32Libcalls[CmpInst::FCMP_ULE] = {{RTLIB::OGT_F32, CmpInst::ICMP_SLE}};
-  FCmp32Libcalls[CmpInst::FCMP_ULT] = {{RTLIB::OGE_F32, CmpInst::ICMP_SLT}};
-  FCmp32Libcalls[CmpInst::FCMP_UNE] = {{RTLIB::UNE_F32, CmpInst::ICMP_NE}};
-  FCmp32Libcalls[CmpInst::FCMP_UNO] = {{RTLIB::UO_F32, CmpInst::ICMP_NE}};
-  FCmp32Libcalls[CmpInst::FCMP_ONE] = {{RTLIB::OGT_F32, CmpInst::ICMP_SGT},
-                                       {RTLIB::OLT_F32, CmpInst::ICMP_SLT}};
-  FCmp32Libcalls[CmpInst::FCMP_UEQ] = {{RTLIB::OEQ_F32, CmpInst::ICMP_EQ},
-                                       {RTLIB::UO_F32, CmpInst::ICMP_NE}};
+  FCmp32Libcalls[CmpInst::FCMP_OEQ] = {{RTLIB::Libcall::OEQ_F32, CmpInst::ICMP_EQ}};
+  FCmp32Libcalls[CmpInst::FCMP_OGE] = {{RTLIB::Libcall::OGE_F32, CmpInst::ICMP_SGE}};
+  FCmp32Libcalls[CmpInst::FCMP_OGT] = {{RTLIB::Libcall::OGT_F32, CmpInst::ICMP_SGT}};
+  FCmp32Libcalls[CmpInst::FCMP_OLE] = {{RTLIB::Libcall::OLE_F32, CmpInst::ICMP_SLE}};
+  FCmp32Libcalls[CmpInst::FCMP_OLT] = {{RTLIB::Libcall::OLT_F32, CmpInst::ICMP_SLT}};
+  FCmp32Libcalls[CmpInst::FCMP_ORD] = {{RTLIB::Libcall::UO_F32, CmpInst::ICMP_EQ}};
+  FCmp32Libcalls[CmpInst::FCMP_UGE] = {{RTLIB::Libcall::OLT_F32, CmpInst::ICMP_SGE}};
+  FCmp32Libcalls[CmpInst::FCMP_UGT] = {{RTLIB::Libcall::OLE_F32, CmpInst::ICMP_SGT}};
+  FCmp32Libcalls[CmpInst::FCMP_ULE] = {{RTLIB::Libcall::OGT_F32, CmpInst::ICMP_SLE}};
+  FCmp32Libcalls[CmpInst::FCMP_ULT] = {{RTLIB::Libcall::OGE_F32, CmpInst::ICMP_SLT}};
+  FCmp32Libcalls[CmpInst::FCMP_UNE] = {{RTLIB::Libcall::UNE_F32, CmpInst::ICMP_NE}};
+  FCmp32Libcalls[CmpInst::FCMP_UNO] = {{RTLIB::Libcall::UO_F32, CmpInst::ICMP_NE}};
+  FCmp32Libcalls[CmpInst::FCMP_ONE] = {{RTLIB::Libcall::OGT_F32, CmpInst::ICMP_SGT},
+                                       {RTLIB::Libcall::OLT_F32, CmpInst::ICMP_SLT}};
+  FCmp32Libcalls[CmpInst::FCMP_UEQ] = {{RTLIB::Libcall::OEQ_F32, CmpInst::ICMP_EQ},
+                                       {RTLIB::Libcall::UO_F32, CmpInst::ICMP_NE}};
 
   FCmp64Libcalls.resize(CmpInst::LAST_FCMP_PREDICATE + 1);
-  FCmp64Libcalls[CmpInst::FCMP_OEQ] = {{RTLIB::OEQ_F64, CmpInst::ICMP_EQ}};
-  FCmp64Libcalls[CmpInst::FCMP_OGE] = {{RTLIB::OGE_F64, CmpInst::ICMP_SGE}};
-  FCmp64Libcalls[CmpInst::FCMP_OGT] = {{RTLIB::OGT_F64, CmpInst::ICMP_SGT}};
-  FCmp64Libcalls[CmpInst::FCMP_OLE] = {{RTLIB::OLE_F64, CmpInst::ICMP_SLE}};
-  FCmp64Libcalls[CmpInst::FCMP_OLT] = {{RTLIB::OLT_F64, CmpInst::ICMP_SLT}};
-  FCmp64Libcalls[CmpInst::FCMP_ORD] = {{RTLIB::UO_F64, CmpInst::ICMP_EQ}};
-  FCmp64Libcalls[CmpInst::FCMP_UGE] = {{RTLIB::OLT_F64, CmpInst::ICMP_SGE}};
-  FCmp64Libcalls[CmpInst::FCMP_UGT] = {{RTLIB::OLE_F64, CmpInst::ICMP_SGT}};
-  FCmp64Libcalls[CmpInst::FCMP_ULE] = {{RTLIB::OGT_F64, CmpInst::ICMP_SLE}};
-  FCmp64Libcalls[CmpInst::FCMP_ULT] = {{RTLIB::OGE_F64, CmpInst::ICMP_SLT}};
-  FCmp64Libcalls[CmpInst::FCMP_UNE] = {{RTLIB::UNE_F64, CmpInst::ICMP_NE}};
-  FCmp64Libcalls[CmpInst::FCMP_UNO] = {{RTLIB::UO_F64, CmpInst::ICMP_NE}};
-  FCmp64Libcalls[CmpInst::FCMP_ONE] = {{RTLIB::OGT_F64, CmpInst::ICMP_SGT},
-                                       {RTLIB::OLT_F64, CmpInst::ICMP_SLT}};
-  FCmp64Libcalls[CmpInst::FCMP_UEQ] = {{RTLIB::OEQ_F64, CmpInst::ICMP_EQ},
-                                       {RTLIB::UO_F64, CmpInst::ICMP_NE}};
+  FCmp64Libcalls[CmpInst::FCMP_OEQ] = {{RTLIB::Libcall::OEQ_F64, CmpInst::ICMP_EQ}};
+  FCmp64Libcalls[CmpInst::FCMP_OGE] = {{RTLIB::Libcall::OGE_F64, CmpInst::ICMP_SGE}};
+  FCmp64Libcalls[CmpInst::FCMP_OGT] = {{RTLIB::Libcall::OGT_F64, CmpInst::ICMP_SGT}};
+  FCmp64Libcalls[CmpInst::FCMP_OLE] = {{RTLIB::Libcall::OLE_F64, CmpInst::ICMP_SLE}};
+  FCmp64Libcalls[CmpInst::FCMP_OLT] = {{RTLIB::Libcall::OLT_F64, CmpInst::ICMP_SLT}};
+  FCmp64Libcalls[CmpInst::FCMP_ORD] = {{RTLIB::Libcall::UO_F64, CmpInst::ICMP_EQ}};
+  FCmp64Libcalls[CmpInst::FCMP_UGE] = {{RTLIB::Libcall::OLT_F64, CmpInst::ICMP_SGE}};
+  FCmp64Libcalls[CmpInst::FCMP_UGT] = {{RTLIB::Libcall::OLE_F64, CmpInst::ICMP_SGT}};
+  FCmp64Libcalls[CmpInst::FCMP_ULE] = {{RTLIB::Libcall::OGT_F64, CmpInst::ICMP_SLE}};
+  FCmp64Libcalls[CmpInst::FCMP_ULT] = {{RTLIB::Libcall::OGE_F64, CmpInst::ICMP_SLT}};
+  FCmp64Libcalls[CmpInst::FCMP_UNE] = {{RTLIB::Libcall::UNE_F64, CmpInst::ICMP_NE}};
+  FCmp64Libcalls[CmpInst::FCMP_UNO] = {{RTLIB::Libcall::UO_F64, CmpInst::ICMP_NE}};
+  FCmp64Libcalls[CmpInst::FCMP_ONE] = {{RTLIB::Libcall::OGT_F64, CmpInst::ICMP_SGT},
+                                       {RTLIB::Libcall::OLT_F64, CmpInst::ICMP_SLT}};
+  FCmp64Libcalls[CmpInst::FCMP_UEQ] = {{RTLIB::Libcall::OEQ_F64, CmpInst::ICMP_EQ},
+                                       {RTLIB::Libcall::UO_F64, CmpInst::ICMP_NE}};
 }
 
 ARMLegalizerInfo::FCmpLibcallsList
@@ -356,7 +356,7 @@ bool ARMLegalizerInfo::legalizeCustom(LegalizerHelper &Helper, MachineInstr &MI,
       return false;
 
     auto Libcall =
-        MI.getOpcode() == G_SREM ? RTLIB::SDIVREM_I32 : RTLIB::UDIVREM_I32;
+        MI.getOpcode() == G_SREM ? RTLIB::Libcall::SDIVREM_I32 : RTLIB::Libcall::UDIVREM_I32;
 
     // Our divmod libcalls return a struct containing the quotient and the
     // remainder. Create a new, unused register for the quotient and use the
